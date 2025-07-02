@@ -1,0 +1,65 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.supp
+callgrind.out.*
+cachegrind.out.*
+vgcore.*
+*.pdb
+*.txt
+compile_commands.json
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+.vscode/
+.cache/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Rust
+target/
+Cargo.lock
+42lyon_shifts
