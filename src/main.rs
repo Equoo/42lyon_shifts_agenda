@@ -6,30 +6,14 @@ use actix_web::{
     middleware, post,
     web::{self, Data},
 };
+use error::BackendError;
 use serde::Deserialize;
 use sqlx::SqlitePool;
 
-// TODO: error management!!!
-async fn get_message(db: &SqlitePool, id: i64) -> String {
-    sqlx::query!(
-        "SELECT message FROM messages
-        WHERE id = ?",
-        id
-    )
-    .fetch_one(db)
-    .await
-    .expect("wawa")
-    .message
-}
+mod db;
+mod error;
 
-// TODO: error management!!!
-async fn post_message(db: &SqlitePool, msg: &str) -> i64 {
-    sqlx::query!("INSERT INTO messages (id, message) VALUES (NULL, ?)", msg)
-        .execute(db)
-        .await
-        .expect("wawa")
-        .last_insert_rowid()
-}
+type BackendResult<T> = Result<T, BackendError>;
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -39,9 +23,12 @@ async fn hello() -> impl Responder {
 }
 
 #[get("/{msg_id}")]
-async fn get_msg(msg_id: web::Path<i64>, db: web::Data<SqlitePool>) -> impl Responder {
-    let msg = get_message(&db, msg_id.into_inner()).await;
-    HttpResponse::Ok().body(format!("This message: {}", msg))
+async fn get_msg(
+    msg_id: web::Path<i64>,
+    db: web::Data<SqlitePool>,
+) -> BackendResult<impl Responder> {
+    let msg = db::get_msg(&db, msg_id.into_inner()).await?;
+    Ok(HttpResponse::Ok().body(format!("This message: {}", msg)))
 }
 
 #[derive(Deserialize)]
@@ -50,9 +37,12 @@ struct Message {
 }
 
 #[post("/post")]
-async fn post_msg(msg: web::Json<Message>, db: web::Data<SqlitePool>) -> impl Responder {
-    let id = post_message(&db, &msg.message).await;
-    HttpResponse::Created().body(format!("{}", id))
+async fn post_msg(
+    msg: web::Json<Message>,
+    db: web::Data<SqlitePool>,
+) -> BackendResult<impl Responder> {
+    let id = db::create_msg(&db, &msg.message).await?;
+    Ok(HttpResponse::Created().body(format!("{}", id)))
 }
 
 #[actix_web::main]
