@@ -5,8 +5,9 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4.11.0"
+dotenvy = "0.15.7"
 env_logger = "0.11.8"
 serde = { version = "1.0.219", features = ["derive"] }
-sqlx = { version = "0.8.6", features = ["runtime-tokio", "sqlite"] }
 tera = "1"
+sqlx = { version = "0.8.6", features = ["runtime-tokio", "mysql"] }
 thiserror = "2.0.12"

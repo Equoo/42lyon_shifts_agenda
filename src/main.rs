@@ -8,7 +8,7 @@ use actix_web::{
 };
 use error::BackendError;
 use serde::Deserialize;
-use sqlx::SqlitePool;
+use sqlx::MySqlPool;
 
 mod db;
 mod error;
@@ -24,8 +24,8 @@ async fn hello() -> impl Responder {
 
 #[get("/{msg_id}")]
 async fn get_msg(
-    msg_id: web::Path<i64>,
-    db: web::Data<SqlitePool>,
+    msg_id: web::Path<u64>,
+    db: web::Data<MySqlPool>,
 ) -> BackendResult<impl Responder> {
     let msg = db::get_msg(&db, msg_id.into_inner()).await?;
     Ok(HttpResponse::Ok().body(format!("This message: {}", msg)))
@@ -39,7 +39,7 @@ struct Message {
 #[post("/post")]
 async fn post_msg(
     msg: web::Json<Message>,
-    db: web::Data<SqlitePool>,
+    db: web::Data<MySqlPool>,
 ) -> BackendResult<impl Responder> {
     let id = db::create_msg(&db, &msg.message).await?;
     Ok(HttpResponse::Created().body(format!("{}", id)))
@@ -47,13 +47,15 @@ async fn post_msg(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let _ = dotenvy::dotenv();
     #[cfg(debug_assertions)]
     unsafe {
         env::set_var("RUST_LOG", "debug");
     }
     env_logger::init();
 
-    let db = SqlitePool::connect("database.db")
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL variable not set");
+    let db = MySqlPool::connect(&db_url)
         .await
         .expect("failed to connect to database");
     HttpServer::new(move || {
