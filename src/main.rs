@@ -53,7 +53,9 @@ async fn main() -> std::io::Result<()> {
     }
     env_logger::init();
 
-    let db = SqlitePool::connect("database.db").await.expect("wawa");
+    let db = SqlitePool::connect("database.db")
+        .await
+        .expect("failed to connect to database");
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(db.clone()))
