@@ -11,6 +11,9 @@ pub enum BackendError {
 
     #[error("Internal server error")]
     InternalError,
+
+    #[error("Database error")]
+    SqlxError(sqlx::Error),
 }
 
 impl ResponseError for BackendError {
@@ -24,7 +27,7 @@ impl ResponseError for BackendError {
         use BackendError::*;
         match *self {
             NotFound => StatusCode::NOT_FOUND,
-            InternalError => StatusCode::INTERNAL_SERVER_ERROR,
+            InternalError | SqlxError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
@@ -33,7 +36,7 @@ impl From<sqlx::Error> for BackendError {
     fn from(value: sqlx::Error) -> Self {
         match value {
             sqlx::Error::RowNotFound => Self::NotFound,
-            _ => Self::InternalError,
+            _ => Self::SqlxError(value),
         }
     }
 }
