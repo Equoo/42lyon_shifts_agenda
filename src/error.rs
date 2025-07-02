@@ -14,6 +14,9 @@ pub enum BackendError {
 
     #[error("Internal server error")]
     FormatError(std::fmt::Error),
+
+    #[error("Templating error")]
+    TemplateError(tera::Error),
 }
 
 impl ResponseError for BackendError {
@@ -27,7 +30,7 @@ impl ResponseError for BackendError {
         use BackendError::*;
         match *self {
             NotFound => StatusCode::NOT_FOUND,
-            SqlxError(_) | FormatError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            SqlxError(_) | FormatError(_) | TemplateError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
@@ -44,5 +47,11 @@ impl From<sqlx::Error> for BackendError {
 impl From<std::fmt::Error> for BackendError {
     fn from(value: std::fmt::Error) -> Self {
         Self::FormatError(value)
+    }
+}
+
+impl From<tera::Error> for BackendError {
+    fn from(value: tera::Error) -> Self {
+        Self::TemplateError(value)
     }
 }
