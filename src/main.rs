@@ -1,17 +1,15 @@
 use std::env;
 
 use actix_web::{
-    App, HttpResponse, HttpServer, Responder, get,
-    http::header::ContentType,
-    middleware, post,
-    web::{self, Data},
+    App, HttpResponse, HttpServer, Responder, get, http::header::ContentType, middleware, web::Data,
 };
 use error::BackendError;
-use serde::Deserialize;
 use sqlx::MySqlPool;
 
 mod db;
 mod error;
+mod model;
+mod routes;
 
 type BackendResult<T> = Result<T, BackendError>;
 
@@ -20,29 +18,6 @@ async fn hello() -> impl Responder {
     HttpResponse::Ok()
         .content_type(ContentType::html())
         .body("hell word")
-}
-
-#[get("/{msg_id}")]
-async fn get_msg(
-    msg_id: web::Path<u64>,
-    db: web::Data<MySqlPool>,
-) -> BackendResult<impl Responder> {
-    let msg = db::get_msg(&db, msg_id.into_inner()).await?;
-    Ok(HttpResponse::Ok().body(format!("This message: {}", msg)))
-}
-
-#[derive(Deserialize)]
-struct Message {
-    message: String,
-}
-
-#[post("/post")]
-async fn post_msg(
-    msg: web::Json<Message>,
-    db: web::Data<MySqlPool>,
-) -> BackendResult<impl Responder> {
-    let id = db::create_msg(&db, &msg.message).await?;
-    Ok(HttpResponse::Created().body(format!("{}", id)))
 }
 
 #[actix_web::main]
@@ -63,8 +38,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(db.clone()))
             .wrap(middleware::Logger::default())
             .service(hello)
-            .service(get_msg)
-            .service(post_msg)
+            .configure(routes::configure_urls)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

@@ -9,11 +9,11 @@ pub enum BackendError {
     #[error("Resource not found")]
     NotFound,
 
-    #[error("Internal server error")]
-    InternalError,
-
     #[error("Database error")]
     SqlxError(sqlx::Error),
+
+    #[error("Internal server error")]
+    FormatError(std::fmt::Error),
 }
 
 impl ResponseError for BackendError {
@@ -27,7 +27,7 @@ impl ResponseError for BackendError {
         use BackendError::*;
         match *self {
             NotFound => StatusCode::NOT_FOUND,
-            InternalError | SqlxError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            SqlxError(_) | FormatError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
@@ -38,5 +38,11 @@ impl From<sqlx::Error> for BackendError {
             sqlx::Error::RowNotFound => Self::NotFound,
             _ => Self::SqlxError(value),
         }
+    }
+}
+
+impl From<std::fmt::Error> for BackendError {
+    fn from(value: std::fmt::Error) -> Self {
+        Self::FormatError(value)
     }
 }
