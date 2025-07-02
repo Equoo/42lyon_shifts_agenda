@@ -63,3 +63,5 @@ dkms.conf
 target/
 Cargo.lock
 42lyon_shifts
+*.db
+.env
