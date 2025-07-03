@@ -1,3 +1,5 @@
 target/
 Cargo.lock
 *.db
+node_modules/
+.env

@@ -1,8 +1,14 @@
-build:
+build_css:
+	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --minify
+
+build_server:
 	docker build -t foyer-shifts .
 
+build: build_css build_server
+
 run:
-	docker run -it --rm --name foyer-shifts-test-run -p 8080:8080 foyer-shifts
+	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --watch &
+	docker run -it --rm --name foyer-shifts-test-run -v ./resources/css:/usr/src/foyer-shifts/resources/css -v ./index.html:/usr/src/foyer-shifts/index.html -p 8080:8080 foyer-shifts
 
 preparedb:
 	docker run \

@@ -46,7 +46,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(Data::new(db.clone()))
             .wrap(middleware::Logger::default())
-            .service(Files::new("/static", "resources"))
+            .service(Files::new("/static", "resources").show_files_listing())
             .service(index)
             .configure(api::configure_endpoints)
             .default_service(web::to(not_found_handler))

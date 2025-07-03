@@ -1,0 +1,33 @@
+
+@import "tailwindcss";
+
+.day-shift {
+	@apply mx-auto max-w-sm;
+}
+
+.day-shift-header {
+	@apply flex justify-between  mb-1;
+}
+
+.shift {
+	@apply mx-auto mb-1 rounded-[5vw] bg-red-100 p-2;
+}
+.shift.enough {
+	@apply bg-green-100;
+}
+
+.shift .header {
+	@apply flex justify-between max-w-sm gap-x-4;
+}
+
+.shift .body {
+	@apply flex flex-col mt-2;
+}
+
+.user-ring {
+	@apply inline-block h-6 w-6 rounded-full ring-2 ring-white;
+}
+
+.ring-bartender {
+	@apply ring-red-700;
+}
