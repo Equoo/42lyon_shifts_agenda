@@ -1,7 +1,7 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::types::chrono;
 
-#[derive(Debug, sqlx::FromRow, Serialize)]
+#[derive(Debug, sqlx::FromRow, Serialize, Deserialize)]
 pub struct User {
     pub username: String,
     #[serde(skip)]
@@ -10,7 +10,7 @@ pub struct User {
     pub grade: UserGrade,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum UserGrade {
     Unknown,
     Interested,
@@ -30,6 +30,20 @@ impl From<i32> for UserGrade {
             3 => Bartender,
             4 => President,
             _ => Unknown,
+        }
+    }
+}
+
+impl From<UserGrade> for i32 {
+    fn from(value: UserGrade) -> Self {
+        use UserGrade::*;
+        match value {
+            Interested => 0,
+            Novice => 1,
+            Partner => 2,
+            Bartender => 3,
+            President => 4,
+            Unknown => -1,
         }
     }
 }
