@@ -1,15 +1,16 @@
+use serde::Serialize;
 use sqlx::types::chrono;
 
-#[derive(Debug, sqlx::FromRow)]
+#[derive(Debug, sqlx::FromRow, Serialize)]
 pub struct User {
-    pub id: i32,
     pub username: String,
+    #[serde(skip)]
     pub password_hash: String,
     #[sqlx(try_from = "i32")]
     pub grade: UserGrade,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub enum UserGrade {
     Unknown,
     Interested,
@@ -33,7 +34,7 @@ impl From<i32> for UserGrade {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Shift {
     pub id: i32,
     pub date: chrono::NaiveDate,

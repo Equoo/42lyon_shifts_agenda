@@ -10,6 +10,7 @@ use actix_web::{
 use error::BackendError;
 use sqlx::MySqlPool;
 
+mod api;
 mod db;
 mod error;
 mod model;
@@ -47,6 +48,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .service(Files::new("/static", "resources"))
             .service(index)
+            .configure(api::configure_endpoints)
             .default_service(web::to(not_found_handler))
     })
     .bind(("0.0.0.0", 8080))?
