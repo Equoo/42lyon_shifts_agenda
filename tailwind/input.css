@@ -1,27 +1,57 @@
 
 @import "tailwindcss";
 
+.button {
+	@apply mt-2 p-1 bg-emerald-200 rounded-2xl cursor-pointer hover:bg-emerald-300
+}
+
 .day-shift {
-	@apply mx-auto max-w-sm;
+	@apply mx-auto max-w-sm mb-4;
 }
 
 .day-shift-header {
-	@apply flex justify-between  mb-1;
+	@apply flex justify-between items-end mb-1;
+}
+
+.tag {
+	@apply flex gap-x-1 items-center text-xs font-semibold px-2 py-1 pr-1 rounded-full;
+
+	img {
+		@apply inline-block h-6 w-6 rounded-full;
+	}
+}
+
+.tag-red {
+	@apply bg-red-300 text-red-800
+}
+
+.tag-blue {
+	@apply bg-blue-200 text-blue-800
 }
 
 .shift {
-	@apply mx-auto mb-1 rounded-[5vw] bg-red-100 p-2;
+	@apply mx-auto mb-1 rounded-3xl bg-red-100;
+
+	.header {
+		@apply flex justify-between rounded-3xl max-w-sm gap-x-4 p-2 cursor-pointer hover:bg-red-200;		
+	}
+
+	.body {
+		@apply flex flex-col p-2;
+
+		.tag {
+			.material-symbols-outlined {
+				@apply rounded-full cursor-pointer hover:bg-white;
+			}
+		}
+	}
 }
 .shift.enough {
 	@apply bg-green-100;
-}
 
-.shift .header {
-	@apply flex justify-between max-w-sm gap-x-4;
-}
-
-.shift .body {
-	@apply flex flex-col mt-2;
+	.header {
+		@apply hover:bg-green-200;		
+	}
 }
 
 .user-ring {
