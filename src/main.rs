@@ -1,8 +1,11 @@
 use std::{env, fs};
 
 use actix_files::Files;
+use actix_session::{SessionMiddleware, storage::CookieSessionStore};
 use actix_web::{
-    App, HttpResponse, HttpServer, Responder, get,
+    App, HttpResponse, HttpServer, Responder,
+    cookie::Key,
+    get,
     http::header::ContentType,
     middleware,
     web::{self, Data},
@@ -11,9 +14,11 @@ use error::BackendError;
 use sqlx::MySqlPool;
 
 mod api;
+mod auth;
 mod db;
 mod error;
 mod model;
+mod util;
 
 type BackendResult<T> = Result<T, BackendError>;
 
@@ -42,10 +47,19 @@ async fn main() -> std::io::Result<()> {
     let db = MySqlPool::connect(&db_url)
         .await
         .expect("failed to connect to database");
+
+    let key = Key::generate();
+
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(db.clone()))
             .wrap(middleware::Logger::default())
+            .wrap(
+                SessionMiddleware::builder(CookieSessionStore::default(), key.clone())
+                    // TODO: REMOVE THIS IN PROD
+                    .cookie_secure(false)
+                    .build(),
+            )
+            .app_data(Data::new(db.clone()))
             .service(Files::new("/static", "resources").show_files_listing())
             .service(index)
             .configure(api::configure_endpoints)

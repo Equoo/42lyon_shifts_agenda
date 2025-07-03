@@ -20,6 +20,27 @@ pub async fn get_user(db: &MySqlPool, username: &str) -> sqlx::Result<User> {
     .await
 }
 
+pub async fn create_user(db: &MySqlPool, user: User) -> sqlx::Result<()> {
+    let User {
+        username,
+        password_hash,
+        grade,
+    } = user;
+    let grade: i32 = grade.into();
+    sqlx::query!(
+        "INSERT INTO
+            users (username, password_hash, grade)
+        VALUES
+            (?, ?, ?)",
+        username,
+        password_hash,
+        grade,
+    )
+    .execute(db)
+    .await?;
+    Ok(())
+}
+
 pub async fn get_shift(db: &MySqlPool, id: i32) -> sqlx::Result<Shift> {
     sqlx::query_as!(
         Shift,
