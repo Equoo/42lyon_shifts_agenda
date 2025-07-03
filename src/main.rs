@@ -1,5 +1,6 @@
 use std::env;
 
+use actix_files::Files;
 use actix_web::{
     App, HttpResponse, HttpServer, Responder, get,
     http::header::ContentType,
@@ -25,6 +26,10 @@ async fn hello(tera: web::Data<Tera>) -> BackendResult<impl Responder> {
         .body(html))
 }
 
+async fn not_found_handler() -> BackendResult<HttpResponse> {
+    Err(BackendError::NotFound)
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let _ = dotenvy::dotenv();
@@ -44,8 +49,10 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(db.clone()))
             .app_data(Data::new(tera.clone()))
             .wrap(middleware::Logger::default())
+            .service(Files::new("/static", "resources"))
             .service(hello)
             .configure(routes::configure_urls)
+            .default_service(web::to(not_found_handler))
     })
     .bind(("0.0.0.0", 8080))?
     .run()
