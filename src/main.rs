@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, fs};
 
 use actix_files::Files;
 use actix_web::{
@@ -9,25 +9,23 @@ use actix_web::{
 };
 use error::BackendError;
 use sqlx::MySqlPool;
-use tera::Tera;
 
 mod db;
 mod error;
 mod model;
-mod routes;
 
 type BackendResult<T> = Result<T, BackendError>;
 
+async fn not_found_handler() -> BackendResult<HttpResponse> {
+    Err(BackendError::NotFound)
+}
+
 #[get("/")]
-async fn hello(tera: web::Data<Tera>) -> BackendResult<impl Responder> {
-    let html = tera.render("pages/index.html", &tera::Context::default())?;
+async fn index() -> BackendResult<impl Responder> {
+    let html = fs::read_to_string("index.html")?;
     Ok(HttpResponse::Ok()
         .content_type(ContentType::html())
         .body(html))
-}
-
-async fn not_found_handler() -> BackendResult<HttpResponse> {
-    Err(BackendError::NotFound)
 }
 
 #[actix_web::main]
@@ -39,7 +37,6 @@ async fn main() -> std::io::Result<()> {
     }
     env_logger::init();
 
-    let tera = Tera::new("templates/**/*.html").expect("failed to initialize templating engine");
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL variable not set");
     let db = MySqlPool::connect(&db_url)
         .await
@@ -47,11 +44,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(db.clone()))
-            .app_data(Data::new(tera.clone()))
             .wrap(middleware::Logger::default())
             .service(Files::new("/static", "resources"))
-            .service(hello)
-            .configure(routes::configure_urls)
+            .service(index)
             .default_service(web::to(not_found_handler))
     })
     .bind(("0.0.0.0", 8080))?
