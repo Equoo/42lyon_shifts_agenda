@@ -6,8 +6,13 @@ build_server:
 
 build: build_css build_server
 
+.PHONY: build_css build_server build
+.PHONY: tailwind run preparedb stopdb rmdb brun
+
+tailwind:
+	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --watch
+
 run:
-	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --watch &
 	docker run -it --rm --name foyer-shifts-test-run -v ./resources/css:/usr/src/foyer-shifts/resources/css -v ./index.html:/usr/src/foyer-shifts/index.html -p 8080:8080 foyer-shifts
 
 preparedb:
