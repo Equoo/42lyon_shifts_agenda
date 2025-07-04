@@ -2,9 +2,7 @@
 
 All API calls share the same `/api` endpoint. This means an endpoint described further down as `/users` will have the full path of `/api/users`.
 
-## Users
-
-### Types
+## Type Definitions
 
 - `UserGrade`: represents the grade of a user. Must be one of the following values:
   - Unknown
@@ -13,6 +11,48 @@ All API calls share the same `/api` endpoint. This means an endpoint described f
   - Partner
   - Bartender
   - President
+- `Date`: represents a date as a String. Formatted as `YYYY-MM-DD`
+
+## Authentication
+
+### POST `/auth/register`
+
+Request body:
+- `username` (String)
+- `password` (String)
+
+Response: HTTP 201 (no response body)
+
+### POST `/auth/login`
+
+Request body:
+- `username` (String)
+- `password` (String)
+
+Response: HTTP 200 with Session Cookie (no response body)
+
+### GET `/auth/me`
+
+Request header:
+- Session Cookie
+
+Request body:
+- `username` (String)
+
+Response body:
+- `username` (String)
+- `grade` (UserGrade)
+
+JSON Response body:
+```json
+{
+    "username": "mew",
+    "grade": "Partner"
+}
+```
+
+
+## Users
 
 ### GET `/users`
 
@@ -32,10 +72,6 @@ JSON Response body:
 ```
 
 ## Shifts
-
-### Types
-
-- `Date`: represents a date as a String. Formatted as `YYYY-MM-DD`
 
 ### GET `/shifts`
 
