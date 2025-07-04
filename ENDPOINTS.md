@@ -36,9 +36,6 @@ Response: HTTP 200 with Session Cookie (no response body)
 Request header:
 - Session Cookie
 
-Request body:
-- `username` (String)
-
 Response body:
 - `username` (String)
 - `grade` (UserGrade)
@@ -54,9 +51,9 @@ JSON Response body:
 
 ## Users
 
-### GET `/users`
+### GET `/users/{username}`
 
-Request body:
+Request path:
 - `username` (String): the `username` for the queried user
 
 Response body:
@@ -73,10 +70,10 @@ JSON Response body:
 
 ## Shifts
 
-### GET `/shifts`
+### GET `/shifts/{id}`
 
 Request body:
-- `shift_id` (Integer): the ID of the shift to query
+- `id` (Integer): the ID of the shift to query
 
 Response body:
 - `id` (Integer)
@@ -90,10 +87,10 @@ JSON Response body:
 }
 ```
 
-### GET `/shifts/users`
+### GET `/shifts/{id}/users`
 
 Request body:
-- `shift_id` (Integer): the ID of the shift to query
+- `id` (Integer): the ID of the shift to query
 
 Response body:
 - Array (User)
@@ -114,9 +111,9 @@ JSON Response body:
 ]
 ```
 
-### GET `/shifts/range`
+### GET `/shifts/range?start={date}&end={date}`
 
-Request body:
+Request query params:
 - `start` (Date): the range start date
 - `end` (Date): the range end date
 

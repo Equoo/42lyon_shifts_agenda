@@ -11,8 +11,9 @@ pub fn configure_endpoints(cfg: &mut ServiceConfig) {
             .service(login::register)
             .service(login::me)
             .service(users::get_user)
+            // NOTE: This needs to be first
+            .service(shifts::get_shift_range)
             .service(shifts::get_shift)
-            .service(shifts::get_shift_users)
-            .service(shifts::get_shift_range),
+            .service(shifts::get_shift_users),
     );
 }
