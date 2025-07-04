@@ -33,7 +33,11 @@
 							<div class="font-medium ml-2 text-gray-600">Soir</div>
 						</div>
 						<div class="flex -space-x-1 overflow-visible">
-							<img class="user-ring ring-bartender" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+							<div class="has-tooltip">
+								<span class='tooltip bg-red-200 text-red-800'>dderny</span>
+								<img class="user-ring ring-bartender" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+							</div>
+								
 							<img class="user-ring" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
 							<img class="user-ring" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt="" />
 							<img class="user-ring" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
@@ -164,6 +168,26 @@
 
 		</div>
 		
+
+		<script>
+
+			function toggleShiftBody(shift) {
+				const body = shift.querySelector('.body');
+				if (body.classList.contains('open')) {
+					body.classList.remove('open');
+				} else {
+					body.classList.add('open');
+				}
+			}
+
+			document.querySelectorAll('.shift .header').forEach(header => {
+				header.addEventListener('click', () => {
+					const shift = header.closest('.shift');
+					toggleShiftBody(shift);
+				});
+			});
+
+		</script>
 	</body>
 </html>
 

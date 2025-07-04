@@ -2,7 +2,10 @@
 @import "tailwindcss";
 
 .button {
-	@apply mt-2 p-1 bg-emerald-200 rounded-2xl cursor-pointer hover:bg-emerald-300
+	@apply mt-2 p-1 bg-emerald-200 rounded-2xl cursor-pointer;
+	@apply hover:bg-emerald-300;
+	@apply active:bg-emerald-400;
+	@apply transition-colors duration-300 ease-in-out;
 }
 
 .day-shift {
@@ -30,20 +33,36 @@
 }
 
 .shift {
-	@apply mx-auto mb-1 rounded-3xl bg-red-100;
+	@apply mx-auto mb-1 rounded-3xl bg-red-100 select-none;
+	/* Add animation to height size */
+	@apply transition-all duration-300 ease-in-out;
 
 	.header {
 		@apply flex justify-between rounded-3xl max-w-sm gap-x-4 p-2 cursor-pointer hover:bg-red-200;		
 	}
 
 	.body {
-		@apply flex flex-col p-2;
+		max-height: fit-content;
+		height: 0px;
+		@apply flex flex-col overflow-hidden;
+		@apply transition-all duration-300 ease-in-out;
 
 		.tag {
 			.material-symbols-outlined {
-				@apply rounded-full cursor-pointer hover:bg-white;
+				@apply rounded-full cursor-pointer select-none;
+				@apply transition-all duration-100 ease-in-out;
+				@apply hover:bg-white;
+				@apply active:bg-gray-200;
+			}
+			span {
+				@apply select-all;
 			}
 		}
+	}
+
+	.body.open {
+		@apply p-4;
+		height: 500px;
 	}
 }
 .shift.enough {
@@ -60,4 +79,12 @@
 
 .ring-bartender {
 	@apply ring-red-700;
+}
+
+.tooltip {
+  @apply invisible absolute rounded shadow-lg p-1.5 -mt-10;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
 }
