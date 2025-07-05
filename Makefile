@@ -1,19 +1,11 @@
-build_css:
-	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --minify
-
-build_server:
+build:
 	docker build -t foyer-shifts .
 
-build: build_css build_server
-
-.PHONY: build_css build_server build
-.PHONY: tailwind run preparedb stopdb rmdb brun
-
-tailwind:
-	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --watch
-
 run:
-	docker run -it --rm --name foyer-shifts-test-run -v ./resources/js:/usr/src/foyer-shifts/resources/js -v ./resources/css:/usr/src/foyer-shifts/resources/css -v ./index.html:/usr/src/foyer-shifts/index.html -p 8080:8080 foyer-shifts
+	docker run -it --rm --name foyer-shifts-test-run -v ./frontend/build:/usr/src/foyer-shifts/frontend/build -p 8080:8080 foyer-shifts &
+	cd frontend && npm run start
+
+brun: build run
 
 preparedb:
 	docker run \
@@ -32,4 +24,4 @@ stopdb:
 rmdb: stopdb
 	docker rm test-mariadb || true
 
-brun: build run
+.PHONY: run preparedb stopdb rmdb build

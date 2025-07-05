@@ -60,8 +60,7 @@ async fn main() -> std::io::Result<()> {
                     .build(),
             )
             .app_data(Data::new(db.clone()))
-            .service(Files::new("/static", "resources").show_files_listing())
-            .service(index)
+            .service(Files::new("/", "./frontend/build").show_files_listing())
             .configure(api::configure_endpoints)
             .default_service(web::to(not_found_handler))
     })
