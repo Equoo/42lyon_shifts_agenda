@@ -28,7 +28,7 @@ function api_request(route, method, data) {
 	});
 }
 
-api_request("shifts/1/users", "GET", request)
+api_request("users/dderny", "GET", request)
 	.then(data => console.log(data))
 	.catch(error => console.error(error));
 
