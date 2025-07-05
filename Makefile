@@ -13,7 +13,7 @@ tailwind:
 	npx @tailwindcss/cli -i ./tailwind/input.css -o ./resources/css/style.css --watch
 
 run:
-	docker run -it --rm --name foyer-shifts-test-run -v ./resources/css:/usr/src/foyer-shifts/resources/css -v ./index.html:/usr/src/foyer-shifts/index.html -p 8080:8080 foyer-shifts
+	docker run -it --rm --name foyer-shifts-test-run -v ./resources/js:/usr/src/foyer-shifts/resources/js -v ./resources/css:/usr/src/foyer-shifts/resources/css -v ./index.html:/usr/src/foyer-shifts/index.html -p 8080:8080 foyer-shifts
 
 preparedb:
 	docker run \
