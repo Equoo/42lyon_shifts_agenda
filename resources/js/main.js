@@ -3,7 +3,7 @@
 
 let request = {
 	"username": "dderny",
-	//"password": "password123"
+	"password": "password123"
 }
 
 function api_request(route, method, data) {

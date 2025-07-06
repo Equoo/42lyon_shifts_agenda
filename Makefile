@@ -2,8 +2,10 @@ build:
 	docker build -t foyer-shifts .
 
 run:
-	docker run -it --rm --name foyer-shifts-test-run -v ./frontend/build:/usr/src/foyer-shifts/frontend/build -p 8080:8080 foyer-shifts &
+	docker rm -f foyer-shifts-test-run || true
+	docker run -it --rm --detach --name foyer-shifts-test-run -v ./frontend/build:/usr/src/foyer-shifts/frontend/build -p 8080:8080 foyer-shifts
 	cd frontend && npm run start
+	docker rm -f foyer-shifts-test-run || true
 
 brun: build run
 

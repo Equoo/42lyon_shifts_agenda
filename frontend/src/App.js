@@ -2,28 +2,97 @@ import './App.css';
 
 import { useState } from 'react';
 
+const curday = new Date();
+// check authed
+const logged_in = () => {
+  const token = localStorage.getItem("token");
+  return token !== null && token !== undefined && token !== "";
+} 
+let me = null;
+
+function api_request(route, method, data) {
+	let body = null;
+	if (method === "GET") {
+		let queryParams = new URLSearchParams(data).toString();
+		route = route + "?" + queryParams
+	} else {
+		body = JSON.stringify(data)
+	}
+
+	return fetch("/api/" + route, {
+		method: method,
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: body
+	}).then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+	.catch(error => {
+		console.error("Error:", error);
+		throw error;
+	});
+}
+
+if (!logged_in()) {
+  const request = {
+    "username": "dderny",
+    "password": "password123"
+  }
+
+  api_request("auth/login", "POST", request)
+    .then(data => {
+      console.log("Logged in successfully");
+    })
+    .catch(error => console.error("Login error:", error));
+}
+
+api_request("auth/me", "GET", {})
+  .then(data => {
+    me = data;
+    console.log("Me:", me);
+  })
+  .catch(error => console.error(error));
+
 const color_per_grade = {
   "president": {
-    "text": {
-      
-    }
+    "text": "text-red-800",
+    "bg": "bg-red-200",
+    "ring": "ring-red-700"
+  },
+  "bartender": {
+    "text": "text-red-800",
+    "bg": "bg-red-200",
+    "ring": "ring-red-700"
+  },
+  "novice": {
+    "text": "text-gray-800",
+    "bg": "bg-gray-100",
+    "ring": "ring-gray-100"
   }
 }
 
 function UserIcon({user})
 {
+  const colors = color_per_grade[user.grade];
+  
   return (
     <div className="has-tooltip">
-      <span className='tooltip bg-red-200 text-red-800'>dderny</span>
-      <img className="user-ring ring-bartender" src={user.img} alt="" />
+      <span className={`tooltip ${colors.bg} ${colors.text}`}>{user.username}</span>
+      <img className={`user-ring ${colors.ring}`} src={user.img} alt="" />
     </div>
   );
 }
 
 function UserTag({user})
 {
+  const colors = color_per_grade[user.grade];
+
   return (
-    <div className="tag tag-red">
+    <div className={`tag ${colors.bg} ${colors.text}`}>
       <img src={user.img} alt="" />
       <span>{user.username}</span>
       <span className="material-symbols-outlined">close_small</span>
@@ -38,14 +107,28 @@ function Shift({id, time, users})
   function toggleShiftBody(shift) {
     setOpen(!isopen);
   }
+  function isInShift() {
+    users.forEach(user => {
+      if (user.id === id)
+        return true;
+    });
+    return false;
+  }
+
+  function joinShift() {
+    
+  }
+
+  function leftShift() {
+    
+  }
 
   const user_icons = users.map(user => {
-    return (<UserIcon user={user} />);
+    return (<UserIcon key={user.id} user={user} />);
   });
   const user_tags = users.map(user => {
-    return (<UserTag user={user} />);
+    return (<UserTag key={user.id} user={user} />);
   });
-
 
   return (
     <div className="shift">
@@ -63,7 +146,9 @@ function Shift({id, time, users})
           {user_tags}
         </div>
 
-        <button className="button">Shifter</button>
+        <button className="button" onClick={(isInShift() && leftShift) || joinShift}>
+          {(isInShift() && "Quitter") || "Shifter"}
+        </button>
       </div>
     </div>
   );
@@ -73,16 +158,19 @@ function DayShift()
 {
   let users = [
     {
+      id: 1,
       username: "ticasali",
       grade: "bartender",
       img: "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
     },
     {
+      id: 2,
       username: "dderny",
       grade: "novice",
       img: "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
     },
     {
+      id: 3,
       username: "tdaclin",
       grade: "novice",
       img: "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -96,8 +184,8 @@ function DayShift()
         <span>30 Juin</span>
       </div>
       
-      <Shift id={5} time={1} users={users}/>
-      <Shift id={5} time={1} users={users}/>
+      <Shift id={2} time={1} users={users}/>
+      <Shift id={6} time={0} users={users}/>
     </div>
   );
 }
