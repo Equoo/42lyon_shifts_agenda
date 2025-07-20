@@ -46,6 +46,7 @@ cachegrind.out.*
 vgcore.*
 *.pdb
 *.txt
+.sqlx
 compile_commands.json
 
 # Kernel Module Compile Results

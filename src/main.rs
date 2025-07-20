@@ -28,7 +28,7 @@ async fn not_found_handler() -> BackendResult<HttpResponse> {
 
 #[get("/")]
 async fn index() -> BackendResult<impl Responder> {
-    let html = fs::read_to_string("index.html")?;
+    let html = fs::read_to_string("./frontend/build/index.html")?;
     Ok(HttpResponse::Ok()
         .content_type(ContentType::html())
         .body(html))
@@ -50,6 +50,7 @@ async fn main() -> std::io::Result<()> {
 
     let key = Key::generate();
 
+    println!("Starting server");
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
@@ -60,11 +61,12 @@ async fn main() -> std::io::Result<()> {
                     .build(),
             )
             .app_data(Data::new(db.clone()))
-            .service(Files::new("/", "./frontend/build").show_files_listing())
+            .service(Files::new("/static", "./frontend/build/static"))
+            .service(index)
             .configure(api::configure_endpoints)
             .default_service(web::to(not_found_handler))
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", 80))?
     .run()
     .await
 }

@@ -1,0 +1,42 @@
+services:
+  frontend:
+    image: "node"
+    user: "node"
+    ports:
+      - "3000:3000"
+    working_dir: /home/node/app
+    volumes:
+      - ./frontend:/home/node/app
+    command: "npm run start"
+    depends_on:
+      - backend
+    networks:
+      - network
+      
+  backend:
+    build: ./ 
+    ports:
+      - "8080:80"
+    #volumes:
+      #- ./frontend/build:/usr/src/foyer-shifts/frontend/build
+    environment:
+      - DATABASE_URL=mariadb://root:debug@database:3306/foyer
+    depends_on:
+      - database
+    networks:
+      - network
+
+  database:
+    image: mariadb:latest 
+    ports:
+      - "3307:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=debug
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

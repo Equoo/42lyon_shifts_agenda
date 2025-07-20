@@ -1,6 +1,6 @@
-CREATE USER 'foyer' IDENTIFIED BY 'wawa';
+CREATE USER 'foyer'@'%' IDENTIFIED BY 'debug';
 CREATE DATABASE foyer;
-GRANT ALL PRIVILEGES ON foyer.* TO 'foyer';
+GRANT ALL PRIVILEGES ON foyer.* TO 'foyer'@'%';
 FLUSH PRIVILEGES;
 
 USE foyer;
