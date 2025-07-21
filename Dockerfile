@@ -4,7 +4,7 @@ WORKDIR /usr/src/foyer-shifts
 COPY . .
 
 RUN apk add --no-cache musl-dev make nodejs npm
-RUN cd frontend && npm run build && cd ..
+RUN cd frontend && npm install && npm run build && cd ..
 ENV SQLX_OFFLINE=true
 RUN cargo install --path .
 
