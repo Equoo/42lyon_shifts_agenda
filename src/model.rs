@@ -1,11 +1,11 @@
+use ::chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono;
 
 #[derive(Debug, sqlx::FromRow, Serialize, Deserialize)]
 pub struct User {
-    pub username: String,
-    #[serde(skip)]
-    pub password_hash: String,
+    pub login: String,
+    pub img_url: String,
     #[sqlx(try_from = "i32")]
     pub grade: UserGrade,
 }
@@ -48,8 +48,10 @@ impl From<UserGrade> for i32 {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Shift {
-    pub id: i32,
-    pub date: chrono::NaiveDate,
+    pub date: NaiveDate,
+    pub slot: String, // "day" or "night"
+    pub min_users: i32,
+    pub users: Vec<User>,
 }

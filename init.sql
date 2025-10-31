@@ -6,18 +6,21 @@ FLUSH PRIVILEGES;
 USE foyer;
 
 CREATE TABLE IF NOT EXISTS users (
-	username VARCHAR(8) PRIMARY KEY UNIQUE NOT NULL,
-	password_hash VARCHAR(100) NOT NULL,
+	login VARCHAR(64) PRIMARY KEY UNIQUE NOT NULL,
+	img_url TEXT NOT NULL,
 	grade INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS shifts (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	shift_date DATE NOT NULL
+    date_shift DATE NOT NULL,
+    slot ENUM('day','night') NOT NULL,
+    min_users INT DEFAULT 2,
+    PRIMARY KEY (date_shift, slot)
 );
 
-CREATE TABLE IF NOT EXISTS shift_user (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	username VARCHAR(8) NOT NULL REFERENCES users(username),
-	shift_id INT NOT NULL REFERENCES shifts(id)
+CREATE TABLE IF NOT EXISTS shifts_user (
+    date_shift DATE NOT NULL,
+    slot ENUM('day','night') NOT NULL,
+    login VARCHAR(64) NOT NULL REFERENCES users(login),
+    PRIMARY KEY (date_shift, slot, login)
 );

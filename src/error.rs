@@ -1,3 +1,5 @@
+use chrono::ParseError;
+
 use actix_web::{
     HttpResponse, ResponseError,
     http::{StatusCode, header::ContentType},
@@ -32,6 +34,15 @@ pub enum BackendError {
 
     #[error("Cookie error")]
     CookieGetError(actix_session::SessionGetError),
+
+    #[error("Internal server error")]
+    AnyhowError(anyhow::Error),
+
+    #[error("Internal server error")]
+    ReqwestError(reqwest::Error),
+
+    #[error("Internal server error")]
+    ParseError(ParseError),
 }
 
 impl ResponseError for BackendError {
@@ -49,9 +60,8 @@ impl ResponseError for BackendError {
             Forbidden => StatusCode::FORBIDDEN,
             CookieGetError(e) => e.status_code(),
             CookieInsertError(e) => e.status_code(),
-            SqlxError(_) | FormatError(_) | IoError(_) | Argon2Error(_) => {
-                StatusCode::INTERNAL_SERVER_ERROR
-            }
+            SqlxError(_) | FormatError(_) | IoError(_) | AnyhowError(_) | ReqwestError(_)
+            | ParseError(_) | Argon2Error(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
@@ -77,6 +87,24 @@ impl From<std::io::Error> for BackendError {
     }
 }
 
+impl From<anyhow::Error> for BackendError {
+    fn from(value: anyhow::Error) -> Self {
+        Self::AnyhowError(value)
+    }
+}
+
+impl From<ParseError> for BackendError {
+    fn from(value: ParseError) -> Self {
+        Self::ParseError(value)
+    }
+}
+
+impl From<reqwest::Error> for BackendError {
+    fn from(value: reqwest::Error) -> Self {
+        Self::ReqwestError(value)
+    }
+}
+
 impl From<actix_session::SessionGetError> for BackendError {
     fn from(value: actix_session::SessionGetError) -> Self {
         Self::CookieGetError(value)
@@ -86,11 +114,5 @@ impl From<actix_session::SessionGetError> for BackendError {
 impl From<actix_session::SessionInsertError> for BackendError {
     fn from(value: actix_session::SessionInsertError) -> Self {
         Self::CookieInsertError(value)
-    }
-}
-
-impl From<argon2::password_hash::Error> for BackendError {
-    fn from(value: argon2::password_hash::Error) -> Self {
-        Self::Argon2Error(value)
     }
 }

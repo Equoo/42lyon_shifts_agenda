@@ -1,5 +1,6 @@
 use std::{env, fs};
 
+use actix_cors::Cors;
 use actix_files::Files;
 use actix_session::{SessionMiddleware, storage::CookieSessionStore};
 use actix_web::{
@@ -14,7 +15,6 @@ use error::BackendError;
 use sqlx::MySqlPool;
 
 mod api;
-mod auth;
 mod db;
 mod error;
 mod model;
@@ -52,6 +52,12 @@ async fn main() -> std::io::Result<()> {
 
     println!("Starting server");
     HttpServer::new(move || {
+        let cors = Cors::default()
+            .allow_any_origin() // NOTE: To remove unsecure
+            .allow_any_method()
+            .allow_any_header()
+            .supports_credentials();
+
         App::new()
             .wrap(middleware::Logger::default())
             .wrap(
@@ -60,6 +66,7 @@ async fn main() -> std::io::Result<()> {
                     .cookie_secure(false)
                     .build(),
             )
+            .wrap(cors)
             .app_data(Data::new(db.clone()))
             .service(Files::new("/static", "./frontend/build/static"))
             .service(index)

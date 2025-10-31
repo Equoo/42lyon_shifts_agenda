@@ -1,107 +1,221 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* === Base === */
 body {
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-		sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  @apply bg-gray-50 text-gray-900 transition-colors duration-300 ease-in-out;
+  background-color: #f8fafc;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 🌙 Dark mode base */
+.dark body {
+  background-color: #1d2028;
+  color: #f3f4f6;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.button {
-	@apply mt-2 p-1 bg-emerald-200 rounded-2xl cursor-pointer;
-	@apply hover:bg-emerald-300;
-	@apply active:bg-emerald-400;
-	@apply transition-colors duration-300 ease-in-out;
-}
-
-.day-shift {
-	@apply mx-auto max-w-sm mb-4;
-}
-
-.day-shift-header {
-	@apply flex justify-between items-end mb-1;
-}
-
-.tag {
-	@apply flex gap-x-1 items-center text-xs font-semibold px-2 py-1 pr-1 rounded-full;
-
-	img {
-		@apply inline-block h-6 w-6 rounded-full;
-	}
-}
-
-.tag-red {
-	@apply bg-red-300 text-red-800
-}
-
-.tag-blue {
-	@apply bg-blue-200 text-blue-800
-}
-
+/* === Shifts === */
 .shift {
-	@apply mx-auto mb-1 rounded-3xl bg-red-100 select-none;
-	/* Add animation to height size */
-	@apply transition-all duration-300 ease-in-out;
-
-	.header {
-		@apply flex justify-between rounded-3xl max-w-sm gap-x-4 p-2 cursor-pointer;
-		@apply hover:bg-red-200 active:bg-red-300;
-		@apply transition-all duration-300 ease-in-out;
-	}
-
-	.body {
-		max-height: fit-content;
-		height: 0px;
-		@apply flex flex-col overflow-hidden;
-		@apply transition-all duration-300 ease-in-out;
-
-		.tag {
-			.material-symbols-outlined {
-				@apply rounded-full cursor-pointer select-none;
-				@apply transition-all duration-100 ease-in-out;
-				@apply hover:bg-white;
-				@apply active:bg-gray-200;
-			}
-			span {
-				@apply select-all;
-			}
-		}
-	}
-
-	.body.open {
-		@apply p-4;
-		height: 500px;
-	}
+  @apply bg-white dark:bg-[#2a2e3b] rounded-lg shadow mb-3 overflow-hidden border transition-colors duration-300;
+  border-color: #e5e7eb;
 }
-.shift.enough {
-	@apply bg-green-100;
-
-	.header {
-		@apply hover:bg-green-200;		
-	}
+.dark .shift {
+  border-color: #353846;
+}
+.shift .header {
+  @apply flex items-center justify-between px-3 py-2 cursor-pointer;
+}
+.shift .body {
+  @apply max-h-0 overflow-hidden transition-all duration-200 px-3;
 }
 
-.user-ring {
-	@apply inline-block h-6 w-6 rounded-full ring-2;
+/* === Shift states === */
+.shift-completed {
+  @apply border-green-400 bg-green-50;
+}
+.dark .shift-completed {
+  background-color: #254034;
+  border-color: #4ade80;
+}
+.shift-almost {
+  @apply border-amber-300 bg-amber-50;
+}
+.dark .shift-almost {
+  background-color: #4a3b23;
+  border-color: #fbbf24;
+}
+.shift-empty {
+  @apply border-gray-200 bg-white;
+}
+.dark .shift-empty {
+  background-color: #2a2e3b;
+  border-color: #3e4150;
 }
 
-.ring-bartender {
-	@apply ring-red-700;
+/* === Day block === */
+.day-shift {
+  @apply bg-slate-50 rounded-lg p-3 transition-colors duration-300;
+}
+.dark .day-shift {
+  background-color: #242833;
+}
+.day-shift-header {
+  @apply mb-2 border-b pb-1 border-gray-200;
+}
+.dark .day-shift-header {
+  border-color: #3b3e4d;
 }
 
+/* === Buttons === */
+.button {
+  @apply bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm transition-colors duration-300;
+}
+.dark .button {
+  background-color: #3b82f6;
+  color: #fff;
+}
+.dark .button:hover {
+  background-color: #2563eb;
+}
+
+/* === Tabs === */
+.tab-button {
+  @apply px-3 py-1 rounded bg-gray-200 text-gray-700 text-sm;
+}
+.dark .tab-button {
+  background-color: #2f3441;
+  color: #d1d5db;
+}
+.tab-button-active {
+  @apply bg-blue-600 text-white;
+}
+.dark .tab-button-active {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+/* === Today highlight === */
+.today-highlight {
+  @apply border-2 border-blue-400 shadow-md bg-blue-50;
+}
+.dark .today-highlight {
+  background-color: #1e293b;
+  border-color: #3b82f6;
+}
+
+/* === Tooltip === */
+.has-tooltip {
+  position: relative;
+}
 .tooltip {
-  @apply invisible absolute rounded shadow-lg px-1.5 py-1 -mt-10;
+  @apply absolute px-2 py-1 rounded text-xs shadow bg-white top-[-2.2rem] left-0 hidden whitespace-nowrap transition-colors duration-300;
+  color: #111827;
+}
+.dark .tooltip {
+  background-color: #303443;
+  color: #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.has-tooltip:hover .tooltip {
+  display: block;
 }
 
+/* === User ring === */
+.user-ring {
+  @apply w-8 h-8 rounded-full ring-2 ring-gray-300;
+}
+.dark .user-ring {
+  ring-color: #525569;
+}
+
+/* === Tags === */
+.tag {
+  @apply inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-gray-100 text-gray-800 transition-colors duration-300;
+}
+.dark .tag {
+  background-color: #2d303b;
+  color: #f3f4f6;
+}
+.tag img {
+  @apply inline-block h-6 w-6 rounded-full;
+}
+
+/* === Dynamic tags === */
+.tag-red {
+  @apply bg-red-300 text-red-800;
+}
+.dark .tag-red {
+  background-color: #3c1f1f;
+  color: #fca5a5;
+}
+.tag-blue {
+  @apply bg-blue-200 text-blue-800;
+}
+.dark .tag-blue {
+  background-color: #1e2b45;
+  color: #93c5fd;
+}
+
+/* === Shift container animation === */
+.shift {
+  @apply mx-auto mb-1 rounded-3xl bg-red-100 select-none transition-all duration-300 ease-in-out;
+}
+.dark .shift {
+  background-color: #312c2c;
+}
+.shift .header {
+  @apply flex justify-between rounded-3xl gap-x-4 p-2 cursor-pointer transition-all duration-300 ease-in-out;
+}
+.shift .header:hover {
+  @apply bg-red-200 active:bg-red-300;
+}
+.dark .shift .header:hover {
+  background-color: #3c3434;
+}
+.shift .body {
+  max-height: fit-content;
+  height: 0px;
+  @apply flex flex-col overflow-hidden transition-all duration-300 ease-in-out;
+}
+.shift .body.open {
+  @apply p-4;
+  height: 500px;
+}
+
+/* === Enough (completed shift visual) === */
+.shift.enough {
+  @apply bg-green-100;
+}
+.dark .shift.enough {
+  background-color: #1d3527;
+}
+.shift.enough .header:hover {
+  @apply hover:bg-green-200;
+}
+.dark .shift.enough .header:hover {
+  background-color: #234232;
+}
+
+/* === Tooltip (improved visibility) === */
+.tooltip {
+  @apply invisible absolute rounded shadow-lg px-1.5 py-1 -mt-10 bg-white;
+}
+.dark .tooltip {
+  background-color: #2d303b;
+  color: #f3f4f6;
+}
 .has-tooltip:hover .tooltip {
   @apply visible z-50;
 }
+

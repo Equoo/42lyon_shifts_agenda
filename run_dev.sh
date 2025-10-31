@@ -13,4 +13,4 @@ sleep 3
 
 DATABASE_URL=mariadb://root:debug@127.0.0.1:3307/foyer cargo sqlx prepare
 docker compose build backend
-docker compose up
+docker compose up -d
