@@ -1,5 +1,5 @@
 use actix_session::Session;
-use actix_web::{Responder, get, post, web};
+use actix_web::{Responder, get, web};
 use chrono::{Duration, NaiveDate};
 use serde::Deserialize;
 use sqlx::MySqlPool;

@@ -24,10 +24,8 @@ pub enum BackendError {
     Unauthorized,
 
     #[error("Forbidden")]
+    #[allow(dead_code)] // TODO: remove this later
     Forbidden,
-
-    #[error("Internal server error")]
-    Argon2Error(argon2::password_hash::Error),
 
     #[error("Cookie error")]
     CookieInsertError(actix_session::SessionInsertError),
@@ -61,7 +59,7 @@ impl ResponseError for BackendError {
             CookieGetError(e) => e.status_code(),
             CookieInsertError(e) => e.status_code(),
             SqlxError(_) | FormatError(_) | IoError(_) | AnyhowError(_) | ReqwestError(_)
-            | ParseError(_) | Argon2Error(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            | ParseError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }

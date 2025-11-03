@@ -1,6 +1,5 @@
 use ::chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
-use sqlx::types::chrono;
 
 #[derive(Debug, sqlx::FromRow, Serialize, Deserialize)]
 pub struct User {

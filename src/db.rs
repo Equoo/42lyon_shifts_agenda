@@ -1,8 +1,7 @@
 use chrono::NaiveDate;
-use serde::Serialize;
 use sqlx::MySqlPool;
 
-use crate::model::{Shift, User, UserGrade};
+use crate::model::{Shift, User};
 
 pub async fn upsert_user(pool: &MySqlPool, login: &str, image_url: &str) -> sqlx::Result<()> {
     sqlx::query!(
@@ -104,7 +103,7 @@ pub async fn get_shift_with_users(
     .fetch_all(pool)
     .await?;
 
-    let min_users = rows.get(0).and_then(|r| r.min_users).unwrap_or(2);
+    let min_users = rows.first().and_then(|r| r.min_users).unwrap_or(2);
 
     for row in rows {
         if let Some(login) = row.login {

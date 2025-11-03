@@ -85,8 +85,8 @@ pub async fn callback_42(
     session.insert(
         "user",
         User {
-            login: login,
-            img_url: img_url,
+            login,
+            img_url,
             grade: UserGrade::Interested,
         },
     )?;
