@@ -48,7 +48,7 @@ function ThemeToggle() {
 // API helper
 // ======================================
 async function api_request(route, method = "GET", data = null) {
-  let url = "http://127.0.0.1:8080" + "/api/" + route;
+  let url = "/api/" + route;
   const options = {
     method,
     headers: {
@@ -316,7 +316,7 @@ function DayColumn({ dateStr, shiftsForDay, currentUser, onShiftUpdate, pushToas
 function App() {
   const [me, setMe] = useState(null);
 
-	useAutoTheme();
+  useAutoTheme();
 
   // 🗓️ Start from today instead of startOfWeek()
   const [weekStart, setWeekStart] = useState(() => {
@@ -327,7 +327,7 @@ function App() {
 
   const [weekShifts, setWeekShifts] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
-  const [toasts, setToasts] = useState([]);
+  const [toasts, setToasts] = useState([]); 
 
   function pushToast(t) {
     const id = Date.now() + Math.random();
@@ -338,16 +338,35 @@ function App() {
     setToasts((prev) => prev.filter((x) => x.id !== id));
   }
 
+	const params = new URLSearchParams(window.location.search);
+  	const code = params.get('code');
+
+
   // 🚀 OAuth-based login
   useEffect(() => {
     (async () => {
-      try {
-        const user = await api_request("auth/me", "GET");
+      if (code) {
+		try {
+			await api_request("auth/42/callback", "POST", {
+				code: code
+			});
+			const user = await api_request("auth/me");
+        	setMe(user);
+			window.location.href = "/";
+		} catch (e) {
+			console.error(e);
+		}	
+		return
+	  }
+
+	  try {
+        const user = await api_request("auth/me");
         setMe(user);
       } catch (e) {
         if (e.message === "unauthorized") {
           // not logged in → redirect to 42 OAuth
-          window.location.href = "http://127.0.0.1:8080/api/auth/42/login";
+			const url = await api_request("auth/42/login", "POST")
+			window.location.href = url;
         } else {
           console.error(e);
           pushToast({ type: "error", message: "Erreur d'authentification" });
@@ -442,6 +461,11 @@ function App() {
   const weekTitle = `${weekStart.toLocaleDateString("fr-FR")} → ${endOfWeek.toLocaleDateString(
     "fr-FR"
   )}`;
+
+  if (window.location.href.includes("api"))
+  {
+	return (<p>API route</p>);
+  }
 
   return (
     <div className="container mx-auto max-w-5xl p-4">

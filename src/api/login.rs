@@ -16,16 +16,14 @@ use crate::{
 };
 
 #[post("/auth/42/login")]
-pub async fn login_42() -> impl Responder {
+pub async fn login_42() -> BackendResult<impl Responder> {
     let client_id = env::var("FT_CLIENT_ID").expect("missing FT_CLIENT_ID");
     let redirect_uri = env::var("FT_REDIRECT_URI").expect("missing FT_REDIRECT_URI");
     let auth_url = format!(
         "https://api.intra.42.fr/oauth/authorize?client_id={}&redirect_uri={}&response_type=code",
         client_id, redirect_uri
     );
-    HttpResponse::Found()
-        .append_header(("Location", auth_url))
-        .finish()
+    Ok(web::Json(auth_url))
 }
 
 #[post("/auth/logout")]
@@ -41,7 +39,7 @@ pub struct CallbackQuery {
 
 #[post("/auth/42/callback")]
 pub async fn callback_42(
-    query: web::Query<CallbackQuery>,
+    query: web::Json<CallbackQuery>,
     db: web::Data<MySqlPool>,
     session: Session,
 ) -> BackendResult<impl Responder> {
@@ -91,9 +89,6 @@ pub async fn callback_42(
     db::upsert_user(&db, &login, &img_url).await?;
 
     // Set session cookie
-    let resp = HttpResponse::Found()
-        .append_header(("Location", "http://127.0.0.1:3000/"))
-        .finish();
     session.insert(
         "user",
         User {
@@ -102,7 +97,7 @@ pub async fn callback_42(
             grade: UserGrade::Interested,
         },
     )?;
-    Ok(resp)
+    Ok(web::Json("Connected"))
 }
 
 #[get("/auth/me")]
