@@ -1,15 +1,21 @@
-use crate::model::{User, UserGrade};
-use crate::util;
-use crate::{BackendResult, db};
 use actix_session::Session;
-use actix_web::{HttpResponse, Responder, get, web};
+use actix_web::{
+    HttpResponse, Responder, get, post,
+    web::{self, Redirect},
+};
 use reqwest::Client;
 use serde::Deserialize;
 use serde_json::Value;
 use sqlx::MySqlPool;
 use std::env;
 
-#[get("/auth/42/login")]
+use crate::{
+    BackendResult, db,
+    model::{User, UserGrade},
+    util,
+};
+
+#[post("/auth/42/login")]
 pub async fn login_42() -> impl Responder {
     let client_id = env::var("FT_CLIENT_ID").expect("missing FT_CLIENT_ID");
     let redirect_uri = env::var("FT_REDIRECT_URI").expect("missing FT_REDIRECT_URI");
@@ -22,12 +28,18 @@ pub async fn login_42() -> impl Responder {
         .finish()
 }
 
+#[post("/auth/logout")]
+pub async fn logout(session: Session) -> impl Responder {
+    session.purge();
+    Redirect::to("/")
+}
+
 #[derive(Deserialize)]
 pub struct CallbackQuery {
     code: String,
 }
 
-#[get("/auth/42/callback")]
+#[post("/auth/42/callback")]
 pub async fn callback_42(
     query: web::Query<CallbackQuery>,
     db: web::Data<MySqlPool>,
