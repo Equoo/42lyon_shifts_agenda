@@ -59,8 +59,8 @@ pub async fn register_to_shift(
 }
 
 /// Deregister current user from a shift
-#[get("/shifts/deregister")]
-pub async fn deregister_from_shift(
+#[get("/shifts/unregister")]
+pub async fn unregister_from_shift(
     session: Session,
     db: web::Data<MySqlPool>,
     query: web::Query<DateQuery>,

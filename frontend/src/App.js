@@ -201,10 +201,10 @@ function ShiftCard({ shift, currentUser, onUpdate, pushToast }) {
     }
   }
 
-  async function handleDeregister() {
+  async function handleUnregister() {
     if (isPast) return;
     try {
-      const updated = await api_request("shifts/deregister", "GET", {
+      const updated = await api_request("shifts/unregister", "GET", {
         date: shift.date,
         slot: shift.slot,
       });
@@ -260,7 +260,7 @@ function ShiftCard({ shift, currentUser, onUpdate, pushToast }) {
           }`}
           disabled={isPast}
           title={isPast ? "Impossible de s'inscrire à un shift passé" : ""}
-          onClick={hasCurrent ? handleDeregister : handleRegister}
+          onClick={hasCurrent ? handleUnregister : handleRegister}
         >
           {isPast
             ? "Shift passé"
