@@ -24,7 +24,6 @@ pub enum BackendError {
     Unauthorized,
 
     #[error("Forbidden")]
-    #[allow(dead_code)] // TODO: remove this later
     Forbidden,
 
     #[error("Cookie error")]

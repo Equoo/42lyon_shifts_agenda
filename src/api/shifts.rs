@@ -51,14 +51,14 @@ pub async fn register_to_shift(
     db: web::Data<MySqlPool>,
     query: web::Query<DateQuery>,
 ) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
     let DateQuery { date, slot } = query.into_inner();
-    if date >= chrono::Utc::now().date_naive() {
-        let user: User = util::require_user(&session)?;
+    if date < chrono::Utc::now().date_naive() {
+        Err(crate::BackendError::Forbidden)
+    } else {
         db::add_user_to_shift(&db, date, &slot, &user.login).await?;
         let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
         Ok(web::Json(updated_shift))
-    } else {
-        Err(crate::error::BackendError::Unauthorized)
     }
 }
 
