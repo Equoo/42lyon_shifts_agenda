@@ -9,7 +9,7 @@ pub struct User {
     pub grade: UserGrade,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum UserGrade {
     Unknown,
     Interested,

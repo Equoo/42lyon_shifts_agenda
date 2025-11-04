@@ -4,7 +4,11 @@ use chrono::{Duration, NaiveDate};
 use serde::Deserialize;
 use sqlx::MySqlPool;
 
-use crate::{BackendResult, db, model::User, util};
+use crate::{
+    BackendResult, db,
+    model::{User, UserGrade},
+    util,
+};
 
 #[derive(Deserialize)]
 struct DateQuery {
@@ -56,6 +60,24 @@ pub async fn register_to_shift(
     } else {
         Err(crate::error::BackendError::Unauthorized)
     }
+}
+
+#[get("/shift/register/{login}")]
+pub async fn register_user_to_shift(
+    session: Session,
+    db: web::Data<MySqlPool>,
+    query: web::Query<DateQuery>,
+    login: web::Path<String>,
+) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
+    if user.grade != UserGrade::President {
+        return Err(crate::BackendError::Forbidden);
+    }
+    let DateQuery { date, slot } = query.into_inner();
+    let login = login.into_inner();
+    db::remove_user_from_shift(&db, date, &slot, &login).await?;
+    let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
+    Ok(web::Json(updated_shift))
 }
 
 /// Deregister current user from a shift
