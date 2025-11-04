@@ -34,9 +34,29 @@ async fn index() -> BackendResult<impl Responder> {
         .body(html))
 }
 
+fn check_missing_env_vars() -> Vec<String> {
+    const VARS: &[&str] = &[
+        "DATABASE_URL",
+        "FT_CLIENT_ID",
+        "FT_CLIENT_SECRET",
+        "FT_REDIRECT_URI",
+    ];
+    let mut missing = vec![];
+    for var in VARS {
+        if let Err(env::VarError::NotPresent) = env::var(var) {
+            missing.push(var.to_string());
+        }
+    }
+    missing
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let _ = dotenvy::dotenv();
+    let vars = check_missing_env_vars();
+    if !vars.is_empty() {
+        panic!("environment variables not set: {vars:?}");
+    }
     #[cfg(debug_assertions)]
     unsafe {
         env::set_var("RUST_LOG", "debug");
