@@ -187,7 +187,7 @@ function ShiftCard({ shift, currentUser, onUpdate, pushToast }) {
   async function handleRegister() {
     if (isPast) return;
     try {
-      const updated = await api_request("shifts/register", "GET", {
+      const updated = await api_request("shifts/register", "POST", {
         date: shift.date,
         slot: shift.slot,
       });
@@ -204,7 +204,7 @@ function ShiftCard({ shift, currentUser, onUpdate, pushToast }) {
   async function handleUnregister() {
     if (isPast) return;
     try {
-      const updated = await api_request("shifts/unregister", "GET", {
+      const updated = await api_request("shifts/unregister", "POST", {
         date: shift.date,
         slot: shift.slot,
       });

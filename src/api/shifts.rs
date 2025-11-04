@@ -1,5 +1,5 @@
 use actix_session::Session;
-use actix_web::{Responder, get, web};
+use actix_web::{Responder, get, post, web};
 use chrono::{Duration, NaiveDate};
 use serde::Deserialize;
 use sqlx::MySqlPool;
@@ -45,11 +45,11 @@ pub async fn get_shift_users(
 }
 
 /// Register current user to a shift
-#[get("/shifts/register")]
+#[post("/shifts/register")]
 pub async fn register_to_shift(
     session: Session,
     db: web::Data<MySqlPool>,
-    query: web::Query<DateQuery>,
+    query: web::Json<DateQuery>,
 ) -> BackendResult<impl Responder> {
     let user = util::require_user(&session)?;
     let DateQuery { date, slot } = query.into_inner();
@@ -62,11 +62,11 @@ pub async fn register_to_shift(
     }
 }
 
-#[get("/shift/register/{login}")]
+#[post("/shift/register/{login}")]
 pub async fn register_user_to_shift(
     session: Session,
     db: web::Data<MySqlPool>,
-    query: web::Query<DateQuery>,
+    query: web::Json<DateQuery>,
     login: web::Path<String>,
 ) -> BackendResult<impl Responder> {
     let user = util::require_user(&session)?;
@@ -81,11 +81,11 @@ pub async fn register_user_to_shift(
 }
 
 /// Deregister current user from a shift
-#[get("/shifts/unregister")]
+#[post("/shifts/unregister")]
 pub async fn unregister_from_shift(
     session: Session,
     db: web::Data<MySqlPool>,
-    query: web::Query<DateQuery>,
+    query: web::Json<DateQuery>,
 ) -> BackendResult<impl Responder> {
     let DateQuery { date, slot } = query.into_inner();
     let user: User = util::require_user(&session)?;
