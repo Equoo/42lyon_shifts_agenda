@@ -75,7 +75,7 @@ pub async fn register_user_to_shift(
     }
     let DateQuery { date, slot } = query.into_inner();
     let login = login.into_inner();
-    db::remove_user_from_shift(&db, date, &slot, &login).await?;
+    db::add_user_to_shift(&db, date, &slot, &login).await?;
     let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
     Ok(web::Json(updated_shift))
 }
