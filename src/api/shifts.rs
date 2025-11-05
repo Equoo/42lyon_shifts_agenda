@@ -70,7 +70,7 @@ pub async fn register_user_to_shift(
     login: web::Path<String>,
 ) -> BackendResult<impl Responder> {
     let user = util::require_user(&session)?;
-    if user.grade != UserGrade::President {
+    if user.grade != UserGrade::President && user.grade != UserGrade::Coordinator {
         return Err(crate::BackendError::Forbidden);
     }
     let DateQuery { date, slot } = query.into_inner();
