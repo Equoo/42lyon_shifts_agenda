@@ -67,7 +67,7 @@ pub async fn get_shifts_with_users_between(
         let entry = grouped.entry(key).or_insert(Shift {
             date: row.date_shift,
             slot: row.slot.clone(),
-            min_users: row.min_users.unwrap_or(2),
+            min_users: row.min_users,
             users: Vec::new(),
         });
         if let Some(login) = row.login {
@@ -103,7 +103,7 @@ pub async fn get_shift_with_users(
     .fetch_all(pool)
     .await?;
 
-    let min_users = rows.first().and_then(|r| r.min_users).unwrap_or(2);
+    let min_users = rows.first().map(|r| r.min_users).unwrap_or(2);
 
     for row in rows {
         if let Some(login) = row.login {
