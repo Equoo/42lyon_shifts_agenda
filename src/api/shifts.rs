@@ -93,3 +93,21 @@ pub async fn unregister_from_shift(
     let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
     Ok(web::Json(updated_shift))
 }
+
+#[post("/shift/unregister/{login}")]
+pub async fn unregister_user_from_shift(
+    session: Session,
+    db: web::Data<MySqlPool>,
+    query: web::Json<DateQuery>,
+    login: web::Path<String>,
+) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
+    if user.grade != UserGrade::President && user.grade != UserGrade::Coordinator {
+        return Err(crate::BackendError::Forbidden);
+    }
+    let DateQuery { date, slot } = query.into_inner();
+    let login = login.into_inner();
+    db::remove_user_from_shift(&db, date, &slot, &login).await?;
+    let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
+    Ok(web::Json(updated_shift))
+}

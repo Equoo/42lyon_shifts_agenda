@@ -16,6 +16,7 @@ pub fn configure_endpoints(cfg: &mut ServiceConfig) {
             .service(shifts::get_shift_week)
             .service(shifts::register_to_shift)
             .service(shifts::register_user_to_shift)
-            .service(shifts::unregister_from_shift),
+            .service(shifts::unregister_from_shift)
+            .service(shifts::unregister_user_from_shift),
     );
 }
