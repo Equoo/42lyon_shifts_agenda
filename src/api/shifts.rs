@@ -1,10 +1,14 @@
 use actix_session::Session;
-use actix_web::{Responder, get, web};
+use actix_web::{Responder, get, post, web};
 use chrono::{Duration, NaiveDate};
 use serde::Deserialize;
 use sqlx::MySqlPool;
 
-use crate::{BackendResult, db, model::User, util};
+use crate::{
+    BackendResult, db,
+    model::{User, UserGrade},
+    util,
+};
 
 #[derive(Deserialize)]
 struct DateQuery {
@@ -41,33 +45,71 @@ pub async fn get_shift_users(
 }
 
 /// Register current user to a shift
-#[get("/shifts/register")]
+#[post("/shifts/register")]
 pub async fn register_to_shift(
     session: Session,
     db: web::Data<MySqlPool>,
-    query: web::Query<DateQuery>,
+    query: web::Json<DateQuery>,
 ) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
     let DateQuery { date, slot } = query.into_inner();
-    if date >= chrono::Utc::now().date_naive() {
-        let user: User = util::require_user(&session)?;
+    let now = chrono::Utc::now().naive_local();
+    let noon = chrono::NaiveTime::from_hms_opt(12, 0, 0).unwrap();
+    if now.date() > date || (date == now.date() && now.time() > noon) {
+        Err(crate::BackendError::Forbidden)
+    } else {
         db::add_user_to_shift(&db, date, &slot, &user.login).await?;
         let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
         Ok(web::Json(updated_shift))
-    } else {
-        Err(crate::error::BackendError::Unauthorized)
     }
 }
 
-/// Deregister current user from a shift
-#[get("/shifts/deregister")]
-pub async fn deregister_from_shift(
+#[post("/shift/register/{login}")]
+pub async fn register_user_to_shift(
     session: Session,
     db: web::Data<MySqlPool>,
-    query: web::Query<DateQuery>,
+    query: web::Json<DateQuery>,
+    login: web::Path<String>,
+) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
+    if user.grade != UserGrade::President && user.grade != UserGrade::Coordinator {
+        return Err(crate::BackendError::Forbidden);
+    }
+    let DateQuery { date, slot } = query.into_inner();
+    let login = login.into_inner();
+    db::add_user_to_shift(&db, date, &slot, &login).await?;
+    let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
+    Ok(web::Json(updated_shift))
+}
+
+/// Deregister current user from a shift
+#[post("/shifts/unregister")]
+pub async fn unregister_from_shift(
+    session: Session,
+    db: web::Data<MySqlPool>,
+    query: web::Json<DateQuery>,
 ) -> BackendResult<impl Responder> {
     let DateQuery { date, slot } = query.into_inner();
     let user: User = util::require_user(&session)?;
     db::remove_user_from_shift(&db, date, &slot, &user.login).await?;
+    let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
+    Ok(web::Json(updated_shift))
+}
+
+#[post("/shift/unregister/{login}")]
+pub async fn unregister_user_from_shift(
+    session: Session,
+    db: web::Data<MySqlPool>,
+    query: web::Json<DateQuery>,
+    login: web::Path<String>,
+) -> BackendResult<impl Responder> {
+    let user = util::require_user(&session)?;
+    if user.grade != UserGrade::President && user.grade != UserGrade::Coordinator {
+        return Err(crate::BackendError::Forbidden);
+    }
+    let DateQuery { date, slot } = query.into_inner();
+    let login = login.into_inner();
+    db::remove_user_from_shift(&db, date, &slot, &login).await?;
     let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
     Ok(web::Json(updated_shift))
 }

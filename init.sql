@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS shifts (
     date_shift DATE NOT NULL,
     slot ENUM('day','night') NOT NULL,
-    min_users INT DEFAULT 2,
+    min_users INT DEFAULT 2 NOT NULL,
     PRIMARY KEY (date_shift, slot)
 );
 

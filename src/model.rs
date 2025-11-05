@@ -9,13 +9,15 @@ pub struct User {
     pub grade: UserGrade,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum UserGrade {
     Unknown,
     Interested,
     Novice,
     Member,
     Bartender,
+    Coordinator,
+    HonoraryMember,
     President,
 }
 
@@ -27,7 +29,9 @@ impl From<i32> for UserGrade {
             1 => Novice,
             2 => Member,
             3 => Bartender,
-            4 => President,
+            4 => Coordinator,
+            5 => HonoraryMember,
+            6 => President,
             _ => Unknown,
         }
     }
@@ -41,7 +45,9 @@ impl From<UserGrade> for i32 {
             Novice => 1,
             Member => 2,
             Bartender => 3,
-            President => 4,
+            Coordinator => 4,
+            HonoraryMember => 5,
+            President => 6,
             Unknown => -1,
         }
     }
