@@ -53,7 +53,9 @@ pub async fn register_to_shift(
 ) -> BackendResult<impl Responder> {
     let user = util::require_user(&session)?;
     let DateQuery { date, slot } = query.into_inner();
-    if date < chrono::Utc::now().date_naive() {
+    let now = chrono::Utc::now().naive_local();
+    let noon = chrono::NaiveTime::from_hms_opt(12, 0, 0).unwrap();
+    if now.date() > date || (date == now.date() && now.time() > noon) {
         Err(crate::BackendError::Forbidden)
     } else {
         db::add_user_to_shift(&db, date, &slot, &user.login).await?;
