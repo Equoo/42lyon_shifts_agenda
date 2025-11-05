@@ -15,7 +15,6 @@ RUN apk add --no-cache \
 # (optionnel) build du frontend
 # RUN cd frontend && npm install && npm run build && cd ..
 
-ENV SQLX_OFFLINE=true
 ENV OPENSSL_STATIC=1
 ENV OPENSSL_LIB_DIR=/usr/lib
 ENV OPENSSL_INCLUDE_DIR=/usr/include

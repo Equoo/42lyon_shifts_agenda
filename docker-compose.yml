@@ -26,7 +26,8 @@ services:
     environment:
       - DATABASE_URL=mariadb://root:debug@database:3306/foyer
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
       - fullstack
 
@@ -40,6 +41,12 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - fullstack
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 networks:
   fullstack:
