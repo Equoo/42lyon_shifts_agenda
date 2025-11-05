@@ -1,4 +1,5 @@
 import "./App.css";
+import {useLocation} from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
 function useAutoTheme() {
@@ -95,18 +96,6 @@ function randomAvatar(seed) {
 }
 
 // ======================================
-// Colors per grade
-// ======================================
-const color_per_grade = {
-  President: { text: "text-red-800", bg: "bg-red-200", ring: "ring-red-700" },
-  Bartender: { text: "text-orange-800", bg: "bg-orange-200", ring: "ring-orange-700" },
-  Partner: { text: "text-blue-800", bg: "bg-blue-200", ring: "ring-blue-700" },
-  Novice: { text: "text-gray-800", bg: "bg-gray-100", ring: "ring-gray-300" },
-  Interested: { text: "text-green-800", bg: "bg-green-100", ring: "ring-green-300" },
-  Unknown: { text: "text-gray-600", bg: "bg-gray-200", ring: "ring-gray-300" },
-};
-
-// ======================================
 // Toasts
 // ======================================
 function Toasts({ toasts, dismiss }) {
@@ -115,7 +104,7 @@ function Toasts({ toasts, dismiss }) {
       {toasts.map((t) => (
         <div
 		  key={t.id}
-          className={`px-4 py-2 rounded shadow bg-white border-l-4 ${
+          className={`px-4 py-2 rounded shadow bg-white dark:bg-[#242833] border-l-4 ${
             t.type === "success" ? "border-green-400" : "border-red-400"
           }`}
         >
@@ -133,12 +122,11 @@ function Toasts({ toasts, dismiss }) {
 // UI atoms
 // ======================================
 function UserIcon({ user }) {
-  const colors = color_per_grade[user.grade] || color_per_grade.Unknown;
   return (
     <div className="has-tooltip">
-      <span className={`tooltip ${colors.bg} ${colors.text}`}>{user.login}</span>
+      <span className={`tooltip tag-${user.grade}`}>{user.login}</span>
       <img
-        className={`user-ring ${colors.ring}`}
+        className={`user-ring tag-${user.grade}`}
         src={user.img_url || randomAvatar(user.login)}
         alt={user.login}
       />
@@ -147,9 +135,8 @@ function UserIcon({ user }) {
 }
 
 function UserTag({ user }) {
-  const colors = color_per_grade[user.grade] || color_per_grade.Unknown;
   return (
-    <div className={`tag ${colors.bg} ${colors.text}`}>
+    <div className={`tag tag-${user.grade}`}>
       <img src={user.img_url || randomAvatar(user.login)} alt={user.login} />
       <span>{user.login}</span>
     </div>
@@ -176,7 +163,7 @@ function ShiftCard({ shift, currentUser, onUpdate, pushToast }) {
 
   const colorClass = isCompleted
     ? "shift-completed"
-    : missing === 1
+    : missing <= 1 || hasBartender
     ? "shift-almost"
     : "shift-empty";
 

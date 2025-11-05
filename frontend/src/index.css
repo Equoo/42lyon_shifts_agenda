@@ -42,18 +42,33 @@ code {
 
 /* === Shift states === */
 .shift-completed {
-  @apply border-green-400 bg-green-50;
+  @apply border-green-400 bg-green-50 !important;
+
+  .header:hover {
+    @apply bg-green-200 active:bg-green-300 !important;
+  }
 }
 .dark .shift-completed {
-  background-color: #254034;
+  background-color: #254034 !important;
   border-color: #4ade80;
+
+  .header:hover {
+    @apply bg-[#325746] active:bg-[#38614e] !important;
+  }
 }
 .shift-almost {
-  @apply border-amber-300 bg-amber-50;
+  @apply border-amber-300 bg-amber-50 !important;
+  .header:hover {
+    @apply bg-amber-100 active:bg-amber-200 !important;
+  }
 }
 .dark .shift-almost {
-  background-color: #4a3b23;
-  border-color: #fbbf24;
+  background-color: #4a3b23 !important;
+  border-color: #fbbf24 !important;
+
+  .header:hover {
+    @apply bg-[#5e4b2c] active:bg-[#6c5633] !important;
+  }
 }
 .shift-empty {
   @apply border-gray-200 bg-white;
@@ -141,12 +156,49 @@ code {
 
 /* === Tags === */
 .tag {
-  @apply inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-gray-100 text-gray-800 transition-colors duration-300;
+  @apply inline-flex items-center gap-1 px-2 py-1 rounded text-sm transition-colors duration-300;
 }
-.dark .tag {
+/*.dark .tag {
   background-color: #2d303b;
   color: #f3f4f6;
+}*/
+
+/* Role-specific modifiers (light + dark) */
+.tag-President {
+  @apply text-red-800 bg-red-200 ring-red-300
+         dark:text-red-200 dark:bg-red-900 dark:ring-red-600;
 }
+
+.tag-Coordinator {
+  @apply text-orange-800 bg-orange-200 ring-orange-300
+         dark:text-orange-200 dark:bg-orange-800 dark:ring-orange-600;
+}
+
+.tag-Bartender {
+  @apply text-yellow-800 bg-yellow-200 ring-yellow-300
+         dark:text-yellow-200 dark:bg-yellow-800 dark:ring-yellow-600;
+}
+
+.tag-Member {
+  @apply text-violet-800 bg-violet-200 ring-violet-300
+         dark:text-violet-200 dark:bg-violet-900 dark:ring-violet-600;
+}
+
+.tag-Novice {
+  @apply text-cyan-800 bg-cyan-100 ring-cyan-300
+         dark:text-cyan-200 dark:bg-cyan-900 dark:ring-cyan-600;
+}
+
+.tag-Interested {
+  @apply text-gray-800 bg-gray-100 ring-gray-300
+         dark:text-gray-200 dark:bg-gray-800 dark:ring-gray-600;
+}
+
+.tag-Unknown {
+  @apply text-gray-600 bg-gray-200 ring-gray-300
+         dark:text-gray-300 dark:bg-gray-300 dark:ring-gray-500;
+}
+
 .tag img {
   @apply inline-block h-6 w-6 rounded-full;
 }
