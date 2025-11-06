@@ -3,8 +3,12 @@ import { ref } from 'vue'
 
 const num = ref(0)
 
-function randomNumber() {
+async function randomNumber() {
+  const button = <HTMLInputElement>document.querySelector('#wawa')
+  button.disabled = true
   num.value = Math.random()
+  await new Promise((f) => setTimeout(f, 1000))
+  button.disabled = false
 }
 </script>
 
@@ -12,12 +16,7 @@ function randomNumber() {
   <h1 class="text-3xl text-center m-5">Hello, world!</h1>
   <div class="m-4 space-y-1">
     <p>Number is: {{ num }}</p>
-    <button
-      class="bg-blue-400 hover:bg-blue-500 text-gray-200 rounded-xl p-1"
-      @click="randomNumber"
-    >
-      Random
-    </button>
+    <button class="btn" id="wawa" @click="randomNumber">Random</button>
   </div>
 </template>
 
