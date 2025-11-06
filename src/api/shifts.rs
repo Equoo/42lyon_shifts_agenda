@@ -54,8 +54,12 @@ pub async fn register_to_shift(
     let user = util::require_user(&session)?;
     let DateQuery { date, slot } = query.into_inner();
     let now = chrono::Utc::now().naive_local();
-    let noon = chrono::NaiveTime::from_hms_opt(12, 0, 0).unwrap();
-    if now.date() > date || (date == now.date() && now.time() > noon) {
+    let time = match slot.as_str() {
+        "day" => chrono::NaiveTime::from_hms_opt(12, 0, 0).unwrap(),
+        "night" => chrono::NaiveTime::from_hms_opt(20, 0, 0).unwrap(),
+        _ => return Err(crate::BackendError::InvalidSlot(slot)),
+    };
+    if now.date() > date || (date == now.date() && now.time() > time) {
         Err(crate::BackendError::Forbidden)
     } else {
         db::add_user_to_shift(&db, date, &slot, &user.login).await?;
@@ -90,10 +94,20 @@ pub async fn unregister_from_shift(
     query: web::Json<DateQuery>,
 ) -> BackendResult<impl Responder> {
     let DateQuery { date, slot } = query.into_inner();
+    let now = chrono::Utc::now().naive_local();
+    let time = match slot.as_str() {
+        "day" => chrono::NaiveTime::from_hms_opt(12, 0, 0).unwrap(),
+        "night" => chrono::NaiveTime::from_hms_opt(20, 0, 0).unwrap(),
+        _ => return Err(crate::BackendError::InvalidSlot(slot)),
+    };
     let user: User = util::require_user(&session)?;
-    db::remove_user_from_shift(&db, date, &slot, &user.login).await?;
-    let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
-    Ok(web::Json(updated_shift))
+    if now.date() > date || (date == now.date() && now.time() > time) {
+        Err(crate::BackendError::Forbidden)
+    } else {
+        db::remove_user_from_shift(&db, date, &slot, &user.login).await?;
+        let updated_shift = db::get_shift_with_users(&db, date, &slot).await?;
+        Ok(web::Json(updated_shift))
+    }
 }
 
 #[post("/shift/unregister/{login}")]

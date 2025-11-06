@@ -40,6 +40,9 @@ pub enum BackendError {
 
     #[error("Internal server error")]
     ParseError(ParseError),
+
+    #[error("Bad request")]
+    InvalidSlot(String),
 }
 
 impl ResponseError for BackendError {
@@ -57,6 +60,7 @@ impl ResponseError for BackendError {
             Forbidden => StatusCode::FORBIDDEN,
             CookieGetError(e) => e.status_code(),
             CookieInsertError(e) => e.status_code(),
+            InvalidSlot(_) => StatusCode::BAD_REQUEST,
             SqlxError(_) | FormatError(_) | IoError(_) | AnyhowError(_) | ReqwestError(_)
             | ParseError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
