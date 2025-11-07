@@ -72,11 +72,11 @@ async fn main() -> std::io::Result<()> {
 
     println!("Starting server");
     HttpServer::new(move || {
-        let cors = Cors::default()
-            .allow_any_origin() // NOTE: To remove unsecure
-            .allow_any_method()
-            .allow_any_header()
-            .supports_credentials();
+        // let cors = Cors::default()
+        //     .allow_any_origin() // NOTE: To remove unsecure
+        //     .allow_any_method()
+        //     .allow_any_header()
+        //     .supports_credentials();
 
         App::new()
             .wrap(middleware::Logger::default())
@@ -86,14 +86,14 @@ async fn main() -> std::io::Result<()> {
                     .cookie_secure(false)
                     .build(),
             )
-            .wrap(cors)
+            // .wrap(cors)
             .app_data(Data::new(db.clone()))
             .service(Files::new("/static", "./frontend/build/static"))
             .service(index)
             .configure(api::configure_endpoints)
             .default_service(web::to(not_found_handler))
     })
-    .bind(("0.0.0.0", 80))?
+    .bind(("0.0.0.0", 8080))?
     .run()
     .await
 }

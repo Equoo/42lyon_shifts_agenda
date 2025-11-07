@@ -7,6 +7,12 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    // TODO: DISABLE
+    host: '0.0.0.0',
+    allowedHosts: ['frontend'],
+    //cors: true,
+  },
   plugins: [tailwindcss(), vue(), vueDevTools()],
   resolve: {
     alias: {
