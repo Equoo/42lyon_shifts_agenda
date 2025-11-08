@@ -1,9 +1,9 @@
 export class User {
-  login: String
-  img_url: String
+  login: string
+  img_url: string
   grade: UserGrade
 
-  constructor(login: String, img_url: String, grade: String) {
+  constructor(login: string, img_url: string, grade: string) {
     this.login = login
     this.img_url = img_url
     this.grade = gradeFromString(grade)
@@ -21,7 +21,7 @@ export enum UserGrade {
   Unknown,
 }
 
-function gradeFromString(str: String): UserGrade {
+function gradeFromString(str: string): UserGrade {
   switch (str) {
     case 'Interested':
       return UserGrade.Interested
