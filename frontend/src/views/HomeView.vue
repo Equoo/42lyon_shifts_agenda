@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getMe, login } from '@/api.ts'
 import { ref } from 'vue'
+import type { User } from '@/types/user.ts'
 
 const num = ref(0)
 
@@ -23,10 +24,16 @@ const me = await getMe().catch(async (res) => {
     })
   }
 })
+
+let username: string;
+if (me === undefined)
+  username = "world";
+else
+  username = (<User>me).login
 </script>
 
 <template>
-  <h1 class="text-3xl text-center m-5">Hello, {{ me.login }}!</h1>
+  <h1 class="text-3xl text-center m-5">Hello, {{ username }}!</h1>
   <div class="m-4 space-y-1">
     <p>Number is: {{ num }}</p>
     <button class="btn" id="wawa" @click="randomNumber">Random</button>
