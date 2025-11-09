@@ -48,7 +48,7 @@ auth.$subscribe(() => me.value = auth.user)
           </div>
         </div>
         <div class="static inset-y-0 right-0 flex items-center inset-auto ml-6 pr-0">
-          <UserBadge v-if="me" v-bind="me" />
+          <UserBadge v-if="me" v-bind="<User>me" />
           <div v-else>Not logged in</div>
         </div>
       </div>
