@@ -3,10 +3,12 @@ import { onMounted } from 'vue'
 import { getMe, handleLoginCallback } from '@/api.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.ts'
+import { useToastStore } from '@/stores/toast.ts'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const toast = useToastStore()
 
 const code = <String>route.query.code
 
@@ -18,6 +20,7 @@ onMounted(async () => {
   await handleLoginCallback(code)
     .then(getMe)
     .then((user) => {
+      toast.success('Logged in! Welcome, ' + user.login + '!')
       authStore.user = user
       router.replace({ path: '/' })
     })

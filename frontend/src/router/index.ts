@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import CallbackView from '@/views/CallbackView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/stores/auth.ts'
+import { useToastStore } from '@/stores/toast.ts'
 
 const routes = [
   { path: '/', component: HomeView },
@@ -19,8 +20,10 @@ router.beforeEach(async (to) => {
   const publicPages = ['/login', '/auth/callback']
   const authRequired = !publicPages.includes(to.path)
   const auth = useAuthStore()
+  const toast = useToastStore()
 
   if (authRequired && !auth.user) {
+    toast.info('You need to login to access this resource')
     return '/login'
   }
 })
