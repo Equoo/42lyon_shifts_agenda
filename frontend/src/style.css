@@ -8,6 +8,18 @@ body {
   @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:bg-gray-700 disabled:text-gray-400 cursor-pointer disabled:cursor-not-allowed text-sm transition-colors duration-300;
 }
 
+.toasts-enter-active {
+  transition: all 0.2s ease;
+}
+.toasts-leave-active {
+  transition: all 0.3s ease;
+}
+.toasts-enter-from,
+.toasts-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
 .toast-success {
   @apply border-b-green-600 dark:border-b-green-400;
 }

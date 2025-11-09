@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth.ts'
+import { useToastStore } from '@/stores/toast.ts'
 
 const authStore = useAuthStore()
+const toast = useToastStore()
 
 const num = ref(0)
 
@@ -21,7 +23,10 @@ const login = authStore.user?.login
   <h1 class="text-3xl text-center m-5">Hello, {{ login }}!</h1>
   <div class="m-4 space-y-1">
     <p>Number is: {{ num }}</p>
-    <button class="btn" id="wawa" @click="randomNumber">Random</button>
+    <div class="flex flex-col space-y-1 max-w-50">
+      <button class="btn" id="wawa" @click="randomNumber">Random</button>
+      <button class="btn" @click="toast.info('wawa')">Notify me</button>
+    </div>
   </div>
 </template>
 
