@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { handleLoginCallback } from '@/api.ts'
+import { getMe, handleLoginCallback } from '@/api.ts'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore()
 
 const code = <String>route.query.code
 
@@ -14,8 +16,9 @@ onMounted(async () => {
     return
   }
   await handleLoginCallback(code)
-    .then((res) => {
-      console.log(res)
+    .then(getMe)
+    .then((user) => {
+      authStore.user = user
       router.replace({ path: '/' })
     })
     .catch((e) => {

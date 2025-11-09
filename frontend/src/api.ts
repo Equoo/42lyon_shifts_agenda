@@ -20,11 +20,11 @@ export async function getMe(): Promise<User> {
     .then((data) => new User(data.login, data.img_url, data.grade))
 }
 
-export async function login(): Promise<string> {
+export async function apiLogin(): Promise<string> {
   return await client.post('auth/42/login').then((response) => response.data)
 }
 
-export async function logout(): Promise<void> {
+export async function apiLogout(): Promise<void> {
   return await client.post('auth/logout')
 }
 
