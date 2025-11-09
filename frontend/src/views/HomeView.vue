@@ -20,7 +20,7 @@ const login = authStore.user?.login
 </script>
 
 <template>
-  <h1 class="text-3xl text-center m-5">Hello, {{ login }}!</h1>
+  <h1 class="text-3xl text-center m-5">Hello!</h1>
   <div class="m-4 space-y-1">
     <p>Number is: {{ num }}</p>
     <div class="flex flex-col space-y-1 max-w-50">

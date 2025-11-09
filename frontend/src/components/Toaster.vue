@@ -9,7 +9,7 @@ const toastStore = useToastStore()
     <TransitionGroup
       name="toasts"
       tag="div"
-      class="fixed top-5 right-2 flex flex-col float-right mr-5 space-y-3 w-x"
+      class="fixed top-20 right-2 flex flex-col float-right mr-5 space-y-3 w-x"
     >
       <div
         v-for="toast in toastStore.toasts"

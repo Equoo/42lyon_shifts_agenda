@@ -4,9 +4,11 @@ import CallbackView from '@/views/CallbackView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useToastStore } from '@/stores/toast.ts'
+import ShiftsView from '@/views/ShiftsView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
+  { path: '/shifts', component: ShiftsView },
   { path: '/login', component: LoginView },
   { path: '/auth/callback', component: CallbackView },
 ]

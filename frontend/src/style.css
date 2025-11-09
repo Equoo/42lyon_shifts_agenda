@@ -20,6 +20,8 @@ body {
   transform: translateX(100px);
 }
 
+/* TODO: https://coolors.co/contrast-checker */
+
 .toast-success {
   @apply border-b-green-600 dark:border-b-green-400;
 }
@@ -35,3 +37,37 @@ body {
 .toast-error {
   @apply border-b-red-600 dark:border-b-red-400;
 }
+
+.badge-grade-interested {
+    @apply bg-neutral-800 text-neutral-500;
+}
+
+.badge-grade-novice {
+    @apply bg-green-900 text-green-400;
+}
+
+.badge-grade-member {
+    @apply bg-sky-800 text-sky-400;
+}
+
+.badge-grade-bartender {
+    @apply bg-yellow-700 text-yellow-300;
+}
+
+.badge-grade-coordinator {
+    @apply bg-red-800 text-red-400;
+}
+
+.badge-grade-honorarymember {
+    @apply bg-rose-950 text-rose-400;
+}
+
+.badge-grade-president {
+    @apply bg-orange-800 text-orange-300;
+}
+
+/*
+.badge-grade-wawa {
+    @apply bg-neutral-800 text-neutral-300;
+}
+ */
