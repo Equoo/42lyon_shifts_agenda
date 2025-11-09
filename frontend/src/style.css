@@ -5,7 +5,7 @@ body {
 }
 
 .btn {
-  @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:bg-gray-700 disabled:text-gray-400 cursor-pointer disabled:cursor-not-allowed text-sm transition-colors duration-300;
+  @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:text-gray-700 disabled:dark:bg-gray-700 disabled:dark:text-gray-400 cursor-pointer disabled:cursor-not-allowed text-sm transition-colors duration-300;
 }
 
 .toasts-enter-active {
