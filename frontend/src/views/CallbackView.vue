@@ -14,7 +14,8 @@ const code = <String>route.query.code
 
 onMounted(async () => {
   if (code === undefined) {
-    console.error('invalid usage of route')
+    toast.error('Invalid usage of route')
+    await router.replace('/login')
     return
   }
   await handleLoginCallback(code)
@@ -26,13 +27,16 @@ onMounted(async () => {
     })
     .catch((e) => {
       console.error(e)
+      toast.error('Invalid code')
+      router.replace('/login')
     })
 })
 </script>
 
 <template>
-  <div v-if="code === undefined">Missing code</div>
-  <div v-else>Authenticating...</div>
+  <div class="flex flex-items min-h-screen items-center justify-center">
+    <p class="text-center">Authenticating...</p>
+  </div>
 </template>
 
 <style scoped></style>
