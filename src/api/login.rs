@@ -29,7 +29,7 @@ pub async fn login_42() -> BackendResult<impl Responder> {
 #[post("/auth/logout")]
 pub async fn logout(session: Session) -> impl Responder {
     session.purge();
-    Redirect::to("/")
+    HttpResponse::Ok()
 }
 
 #[derive(Deserialize)]

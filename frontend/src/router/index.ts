@@ -5,11 +5,13 @@ import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useToastStore } from '@/stores/toast.ts'
 import ShiftsView from '@/views/ShiftsView.vue'
+import LogoutView from '@/views/LogoutView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
   { path: '/shifts', component: ShiftsView },
   { path: '/login', component: LoginView },
+  { path: '/logout', component: LogoutView },
   { path: '/auth/callback', component: CallbackView },
 ]
 

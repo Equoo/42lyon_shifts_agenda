@@ -48,7 +48,10 @@ auth.$subscribe(() => me.value = auth.user)
           </div>
         </div>
         <div class="static inset-y-0 right-0 flex items-center inset-auto ml-6 pr-0">
-          <UserBadge v-if="me" v-bind="<User>me" />
+          <div class="space-x-3 flex flex-row align-middle" v-if="me">
+            <UserBadge v-bind="<User>me" />
+            <RouterLink to="/logout" class="bg-red-600/50 hover:bg-red-600/70 px-3 py-2 rounded-md font-medium transition-colors duration-300">Logout</RouterLink>
+          </div>
           <div v-else>Not logged in</div>
         </div>
       </div>

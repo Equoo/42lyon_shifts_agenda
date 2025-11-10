@@ -12,5 +12,9 @@ export const useAuthStore = defineStore('auth', {
         window.location.href = uri
       })
     },
+    async logout() {
+      await apiLogout()
+      this.user = null
+    }
   },
 })
