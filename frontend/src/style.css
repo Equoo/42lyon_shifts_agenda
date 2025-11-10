@@ -23,19 +23,19 @@ body {
 /* TODO: https://coolors.co/contrast-checker */
 
 .toast-success {
-  @apply border-b-green-600 dark:border-b-green-400;
+  @apply border-green-600 dark:border-green-400;
 }
 
 .toast-info {
-  @apply border-b-sky-600 dark:border-b-sky-400;
+  @apply border-sky-600 dark:border-sky-400;
 }
 
 .toast-warning {
-  @apply border-b-yellow-600 dark:border-b-yellow-400;
+  @apply border-yellow-600 dark:border-yellow-400;
 }
 
 .toast-error {
-  @apply border-b-red-600 dark:border-b-red-400;
+  @apply border-red-600 dark:border-red-400;
 }
 
 .badge-grade-interested {
