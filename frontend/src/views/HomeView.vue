@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth.ts'
 import { useToastStore } from '@/stores/toast.ts'
 
-const authStore = useAuthStore()
 const toast = useToastStore()
 
 const num = ref(0)
@@ -15,8 +13,6 @@ async function randomNumber() {
   await new Promise((f) => setTimeout(f, 1000))
   button.disabled = false
 }
-
-const login = authStore.user?.login
 </script>
 
 <template>
