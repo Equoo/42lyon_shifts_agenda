@@ -15,6 +15,6 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       await apiLogout()
       this.user = null
-    }
+    },
   },
 })

@@ -39,31 +39,31 @@ body {
 }
 
 .badge-grade-interested {
-    @apply bg-neutral-800 text-neutral-500;
+  @apply bg-neutral-800 text-neutral-500;
 }
 
 .badge-grade-novice {
-    @apply bg-green-900 text-green-400;
+  @apply bg-green-900 text-green-400;
 }
 
 .badge-grade-member {
-    @apply bg-sky-800 text-sky-400;
+  @apply bg-sky-800 text-sky-400;
 }
 
 .badge-grade-bartender {
-    @apply bg-yellow-700 text-yellow-300;
+  @apply bg-yellow-700 text-yellow-300;
 }
 
 .badge-grade-coordinator {
-    @apply bg-red-800 text-red-400;
+  @apply bg-red-800 text-red-400;
 }
 
 .badge-grade-honorarymember {
-    @apply bg-rose-950 text-rose-400;
+  @apply bg-rose-950 text-rose-400;
 }
 
 .badge-grade-president {
-    @apply bg-orange-800 text-orange-300;
+  @apply bg-orange-800 text-orange-300;
 }
 
 /*

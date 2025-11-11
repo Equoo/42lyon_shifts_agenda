@@ -7,10 +7,8 @@ const toast = useToastStore()
 
 async function login() {
   await authStore.login().catch((e) => {
-    if (e.status == 502)
-      toast.error('Failed to reach server')
-    else
-      toast.error(`An unexpected error occurred: ${e.data}`)
+    if (e.status == 502) toast.error('Failed to reach server')
+    else toast.error(`An unexpected error occurred: ${e.data}`)
   })
 }
 </script>
