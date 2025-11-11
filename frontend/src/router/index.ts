@@ -27,6 +27,11 @@ router.beforeEach(async (to) => {
   const toast = useToastStore()
 
   if (authRequired && !auth.user) {
+    if (auth.cookieWasSet) {
+      const res = await auth.attemptAutoLogin()
+      if (res) return to
+      auth.unsetAutoLogin()
+    }
     toast.info('You need to login to access this resource')
     return '/login'
   }
