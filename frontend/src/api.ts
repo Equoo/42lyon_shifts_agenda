@@ -3,7 +3,7 @@ import { User } from '@/types/user.ts'
 
 const clientConfig = {
   baseURL: window.location.protocol + '//' + window.location.host + '/api/',
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
