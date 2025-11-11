@@ -6,14 +6,14 @@ function randomAvatar(seed: any) {
   return `https://api.dicebear.com/7.x/identicon/png?seed=${seed}`
 }
 
-const users = Object.values(UserGrade).map((grade) => {
-  let name = <string>UserGrade[<number>grade]?.toString()
-  return new User(name, randomAvatar(name), name)
-})
+const users = Object.values(UserGrade)
+  .map((grade) => <string>UserGrade[<number>grade]?.toString())
+  .filter((name) => name.length > 1)
+  .map((name) => new User(name, randomAvatar(name), name))
 </script>
 
 <template>
-  <div class="m4 flex flex-col space-y-3">
+  <div class="m-4">
     <UserBadge v-for="user in users" v-bind="user" class="m-2" />
   </div>
 </template>
