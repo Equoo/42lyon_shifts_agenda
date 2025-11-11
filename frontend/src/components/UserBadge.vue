@@ -9,11 +9,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-row space-x-2 rounded-md px-3 py-1.5 max-w-md" :class="'badge-grade-' + UserGrade[grade]?.toLowerCase()">
+  <div
+    class="flex space-x-2 rounded-md px-3 py-1.5 max-w-fit"
+    :class="'badge-grade-' + UserGrade[grade]?.toLowerCase()"
+  >
     <img class="rounded-full aspect-square h-6.5" :src="img_url" :alt="login" />
     <span>{{ login }}</span>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
