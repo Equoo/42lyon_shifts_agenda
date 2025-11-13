@@ -25,7 +25,7 @@ const shiftUsers = [
 
 <template>
   <div class="m-4">
-    <ShiftCard :datetime="DateTime.now()" , slot="day" :users="shiftUsers" />
+    <ShiftCard :datetime="DateTime.now()" slot="day" :users="shiftUsers" />
     <hr class="my-5" />
     <UserBadge v-for="user in users" v-bind="user" class="m-2" />
   </div>
