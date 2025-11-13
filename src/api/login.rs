@@ -1,8 +1,5 @@
 use actix_session::Session;
-use actix_web::{
-    HttpResponse, Responder, get, post,
-    web::{self, Redirect},
-};
+use actix_web::{HttpResponse, Responder, get, post, web};
 use reqwest::Client;
 use serde::Deserialize;
 use serde_json::Value;
@@ -101,7 +98,8 @@ pub async fn callback_42(
 }
 
 #[get("/auth/me")]
-pub async fn me(session: Session) -> BackendResult<impl Responder> {
+pub async fn me(session: Session, db: web::Data<MySqlPool>) -> BackendResult<impl Responder> {
     let user = util::require_user(&session)?;
+    let user = db::get_user(&db, &user.login).await?;
     Ok(HttpResponse::Ok().json(user))
 }
