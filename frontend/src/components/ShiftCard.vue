@@ -24,20 +24,28 @@ const inShift = ref(props.users.some((u) => u.login == auth.user?.login))
 const now = DateTime.now()
 
 async function register() {
-  await registerToShift(<string>props.datetime.toSQLDate(), props.slot).then(() => {
-    toast.success('Registered to shift')
-    props.users.push(<User>auth.user)
-    inShift.value = true
-  })
+  await registerToShift(<string>props.datetime.toSQLDate(), props.slot)
+    .then(() => {
+      toast.success('Registered to shift')
+      props.users.push(<User>auth.user)
+      inShift.value = true
+    })
+    .catch((e) => {
+      toast.error(e)
+    })
 }
 
 async function unregister() {
-  await unregisterFromShift(<string>props.datetime.toSQLDate(), props.slot).then(() => {
-    toast.success('Unregistered from shift')
-    const index = props.users.indexOf(<User>auth.user)
-    props.users.splice(index, 1)
-    inShift.value = false
-  })
+  await unregisterFromShift(<string>props.datetime.toSQLDate(), props.slot)
+    .then(() => {
+      toast.success('Unregistered from shift')
+      const index = props.users.indexOf(<User>auth.user)
+      props.users.splice(index, 1)
+      inShift.value = false
+    })
+    .catch((e) => {
+      toast.error(e)
+    })
 }
 </script>
 
@@ -59,17 +67,15 @@ async function unregister() {
         </div>
       </div>
     </div>
-    <div :class="expanded ? '' : 'hidden'" class="overflow-hidden">
+    <div :class="expanded ? '' : 'hidden'" class="overflow-hidden rounded-b-xl">
       <hr class="border-gray-600" />
       <div class="bg-gray-700/10">
-        <div class="flex flex-row space-x-2 m-1 p-2">
+        <div class="flex flex-row space-x-2 p-3">
           <span class="m-1.5 mx-2">Users registered:</span>
           <UserBadge v-for="user in users" v-bind="user" />
           <span v-if="users.length === 0" class="m-1.5">Nobody :(</span>
         </div>
-      </div>
-      <div class="m-1">
-        <div class="">
+        <div class="px-1 pb-1">
           <button v-if="now > datetime" type="button" class="btn m-2" disabled>Shift passed</button>
           <button v-else-if="inShift" type="button" class="btn m-2" @click="unregister">
             Unregister from shift
