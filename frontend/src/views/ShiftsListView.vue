@@ -59,6 +59,14 @@ async function stepForward() {
 onMounted(async () => {
   await getShifts(currentDate)
 })
+
+function randomInt(min: number, max: number) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+const randomWidthClasses = ['w-2xs', 'w-3xs', 'w-sm', 'w-xs']
 </script>
 
 <template>
@@ -74,7 +82,25 @@ onMounted(async () => {
       :class="shift.slot === 'day' ? 'mt-5' : 'mb-5'"
     />
   </div>
-  <div v-else>Loading...</div>
+  <div v-else class="m-4 space-y-2">
+    <div
+      v-for="index in 14"
+      class="outline-gray-600 outline rounded-xl flex"
+      :class="index % 2 === 1 ? 'mt-4' : 'mb-4'"
+    >
+      <div class="p-5">
+        <div
+          class="rounded-2xl bg-gray-700 animate-pulse h-7.5"
+          :class="randomWidthClasses[randomInt(0, randomWidthClasses.length - 1)]"
+        ></div>
+      </div>
+      <div class="flex p-4">
+        <div v-for="circle in randomInt(1, 5)" class="rounded-full h-9 -mx-1.5 bg-gray-800">
+          <div class="bg-gray-700 rounded-full w-7 h-7 m-1 animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="flex m-4">
     <button type="button" class="btn mx-2 w-1/3" @click="stepBack"><< Previous 7 days</button>
     <div class="w-1/2"></div>
