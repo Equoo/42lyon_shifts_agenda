@@ -46,14 +46,36 @@ async function getShifts(date: DateTime) {
     .catch((e) => toast.error(e))
 }
 
+async function stepBack() {
+  currentDate = currentDate.minus({ days: 7 })
+  await getShifts(currentDate)
+}
+
+async function stepForward() {
+  currentDate = currentDate.plus({ days: 7 })
+  await getShifts(currentDate)
+}
+
 onMounted(async () => {
   await getShifts(currentDate)
 })
 </script>
 
 <template>
-  <ShiftCard v-if="loaded" v-for="shift in shifts" v-bind="shift" />
+  <div class="flex m-4">
+    <button type="button" class="btn mx-2 w-1/3" @click="stepBack"><< Previous 7 days</button>
+    <div class="w-1/2"></div>
+    <button type="button" class="btn mx-2 w-1/3" @click="stepForward">Next 7 days >></button>
+  </div>
+  <div v-if="loaded" class="space-y-2">
+    <ShiftCard v-for="shift in shifts" v-bind="shift" />
+  </div>
   <div v-else>Loading...</div>
+  <div class="flex m-4">
+    <button type="button" class="btn mx-2 w-1/3" @click="stepBack"><< Previous 7 days</button>
+    <div class="w-1/2"></div>
+    <button type="button" class="btn mx-2 w-1/3" @click="stepForward">Next 7 days >></button>
+  </div>
 </template>
 
 <style scoped></style>
