@@ -67,8 +67,12 @@ onMounted(async () => {
     <div class="w-1/2"></div>
     <button type="button" class="btn mx-2 w-1/3" @click="stepForward">Next 7 days >></button>
   </div>
-  <div v-if="loaded" class="space-y-2">
-    <ShiftCard v-for="shift in shifts" v-bind="shift" />
+  <div v-if="loaded" class="m-4 space-y-2">
+    <ShiftCard
+      v-for="shift in shifts"
+      v-bind="shift"
+      :class="shift.slot === 'day' ? 'mt-5' : 'mb-5'"
+    />
   </div>
   <div v-else>Loading...</div>
   <div class="flex m-4">
