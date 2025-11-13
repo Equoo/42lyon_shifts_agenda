@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { User } from '@/types/user.ts'
+import { Shift } from '@/types/shift.ts'
 
 const clientConfig = {
   baseURL: window.location.protocol + '//' + window.location.host + '/api/',
@@ -18,6 +19,26 @@ export async function getMe(): Promise<User> {
     .get('auth/me')
     .then((response) => response.data)
     .then((data) => new User(data.login, data.img_url, data.grade))
+}
+
+export async function getShiftsWeek(date: string): Promise<Shift[]> {
+  return await client
+    .get(`shifts/week?start=${date}`)
+    .then((response) => response.data as any[])
+    .then((data) =>
+      data.map((s) => {
+        const users = (s.users as any[]).map((u) => new User(u.login, u.img_url, u.grade))
+        return new Shift(s.date, s.slot, users)
+      }),
+    )
+}
+
+export async function registerToShift(date: string, slot: string): Promise<void> {
+  return await client.post('shifts/register', { date, slot })
+}
+
+export async function unregisterFromShift(date: string, slot: string): Promise<void> {
+  return await client.post('shifts/unregister', { date, slot })
 }
 
 export async function apiLogin(): Promise<string> {

@@ -6,9 +6,11 @@ import { useAuthStore } from '@/stores/auth.ts'
 import { useToastStore } from '@/stores/toast.ts'
 import DemoView from '@/views/DemoView.vue'
 import LogoutView from '@/views/LogoutView.vue'
+import ShiftsListView from '@/views/ShiftsListView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
+  { path: '/shifts', component: ShiftsListView },
   { path: '/demo', component: DemoView },
   { path: '/login', component: LoginView },
   { path: '/logout', component: LogoutView },
