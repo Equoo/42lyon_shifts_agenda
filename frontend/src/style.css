@@ -20,6 +20,24 @@ body {
   transform: translateX(100px);
 }
 
+.toast-fade-timer {
+  animation: progress 5s linear 0s forwards;
+}
+
+.pause-animation {
+  animation: paused;
+  @apply bg-gray-500/0;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
 /* TODO: https://coolors.co/contrast-checker */
 
 .toast-success {

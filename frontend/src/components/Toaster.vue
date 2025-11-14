@@ -40,27 +40,13 @@ function resumeToast(toastId: number) {
           </button>
           {{ toast.msg }}
         </div>
-        <div class="h-1.25 bg-gray-500 toast-fade-timer" :id="'toast-' + toast.id"></div>
+        <div
+          class="h-1.25 bg-gray-500 transition-all toast-fade-timer"
+          :id="'toast-' + toast.id"
+        ></div>
       </div>
     </TransitionGroup>
   </Teleport>
 </template>
 
-<style scoped>
-.toast-fade-timer {
-  animation: progress 5s linear 0s forwards;
-}
-
-.pause-animation {
-  animation: paused;
-}
-
-@keyframes progress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0;
-  }
-}
-</style>
+<style scoped></style>
