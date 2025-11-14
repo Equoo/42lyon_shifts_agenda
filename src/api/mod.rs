@@ -10,6 +10,7 @@ pub fn configure_endpoints(cfg: &mut ServiceConfig) {
             .service(login::login_42)
             .service(login::callback_42)
             .service(login::me)
+            .service(login::logout)
             .service(users::get_user)
             // NOTE: This needs to be first
             .service(shifts::get_shift_users)

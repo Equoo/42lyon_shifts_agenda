@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+body {
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-50 transition-colors duration-300 ease-in-out;
+}
+
+.btn {
+  @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:text-gray-700 disabled:dark:bg-gray-700 disabled:dark:text-gray-400 cursor-pointer disabled:cursor-not-allowed text-sm transition-colors duration-300;
+}
+
+.toasts-enter-active {
+  transition: all 0.2s ease;
+}
+.toasts-leave-active {
+  transition: all 0.3s ease;
+}
+.toasts-enter-from,
+.toasts-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.toast-fade-timer {
+  animation: progress 5s linear 0s forwards;
+}
+
+.pause-animation {
+  animation: paused;
+  @apply bg-gray-500/0;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
+/* TODO: https://coolors.co/contrast-checker */
+
+.toast-success {
+  @apply border-green-600 dark:border-green-400;
+}
+
+.toast-info {
+  @apply border-sky-600 dark:border-sky-400;
+}
+
+.toast-warning {
+  @apply border-yellow-600 dark:border-yellow-400;
+}
+
+.toast-error {
+  @apply border-red-600 dark:border-red-400;
+}
+
+.badge-grade-interested {
+  @apply bg-neutral-800 text-neutral-500;
+}
+
+.badge-grade-novice {
+  @apply bg-green-900 text-green-400;
+}
+
+.badge-grade-member {
+  @apply bg-sky-800 text-sky-400;
+}
+
+.badge-grade-bartender {
+  @apply bg-yellow-700 text-yellow-300;
+}
+
+.badge-grade-coordinator {
+  @apply bg-red-800 text-red-400;
+}
+
+.badge-grade-honorarymember {
+  @apply bg-rose-950 text-rose-400;
+}
+
+.badge-grade-president {
+  @apply bg-orange-800 text-orange-300;
+}
+
+/*
+.badge-grade-wawa {
+    @apply bg-neutral-800 text-neutral-300;
+}
+ */
