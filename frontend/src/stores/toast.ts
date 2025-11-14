@@ -6,6 +6,7 @@ type ToastNotification = {
   id: number
   type: NotificationType
   msg: string
+  timeoutId: number
 }
 
 export const useToastStore = defineStore('toast', {
@@ -17,7 +18,9 @@ export const useToastStore = defineStore('toast', {
   },
   actions: {
     push(type: NotificationType, msg: string) {
-      this.toasts.push({ id: this.nextId++, type, msg })
+      const id = this.nextId++
+      const timeoutId = setTimeout(() => this.dismiss(id), 5000)
+      this.toasts.push({ id, type, msg, timeoutId })
     },
     success(msg: string) {
       this.push('success', msg)
@@ -36,6 +39,19 @@ export const useToastStore = defineStore('toast', {
         if (this.toasts[i]?.id === id) {
           this.toasts.splice(i--, 1)
         }
+      }
+    },
+    pause(id: number) {
+      const toast = this.toasts.find((t) => t.id === id)
+      if (toast && toast.timeoutId > 0) {
+        clearTimeout(toast.timeoutId)
+        toast.timeoutId = -1
+      }
+    },
+    resume(id: number) {
+      const toast = this.toasts.find((t) => t.id === id)
+      if (toast && toast.timeoutId < 0) {
+        toast.timeoutId = setTimeout(() => this.dismiss(toast.id), 5000)
       }
     },
   },
