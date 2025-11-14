@@ -18,6 +18,7 @@ const props = defineProps<{
 }>()
 
 const dateStr = props.datetime.toFormat('dd/MM/yyyy HH:mm')
+const shiftId = props.datetime.toFormat('dd-MM-yyyy-HH-mm')
 
 const expanded = ref(false)
 const inShift = ref(props.users.some((u) => u.login == auth.user?.login))
@@ -50,14 +51,17 @@ async function unregister() {
 </script>
 
 <template>
-  <div class="outline-gray-600 outline rounded-xl">
+  <div
+    class="outline-gray-600 outline rounded-xl overflow-hidden transition-all"
+    :class="expanded ? 'max-h-45' : 'max-h-17'"
+    :id="shiftId"
+  >
     <div
       class="bg-gray-700/30 hover:cursor-pointer hover:bg-white/10 transition-colors duration-300 select-none flex"
-      :class="expanded ? 'rounded-t-xl' : 'rounded-xl'"
       @click="expanded = !expanded"
     >
       <div class="font-medium text-xl p-5">{{ dateStr }}</div>
-      <div class="flex p-4" :class="expanded ? 'hidden' : ''">
+      <div class="flex p-4">
         <div
           v-for="user in users"
           class="rounded-full h-9 -mx-1.5"
@@ -67,7 +71,7 @@ async function unregister() {
         </div>
       </div>
     </div>
-    <div :class="expanded ? '' : 'hidden'" class="overflow-hidden rounded-b-xl">
+    <div class="overflow-hidden rounded-b-xl">
       <hr class="border-gray-600" />
       <div class="bg-gray-700/10">
         <div class="flex flex-row space-x-2 p-3">

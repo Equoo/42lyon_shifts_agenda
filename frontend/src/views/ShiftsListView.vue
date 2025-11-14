@@ -85,7 +85,7 @@ const randomWidthClasses = ['w-2xs', 'w-3xs', 'w-sm', 'w-xs']
   <div v-else class="m-4 space-y-2">
     <div
       v-for="index in 14"
-      class="outline-gray-600 outline rounded-xl flex"
+      class="outline-gray-600 outline rounded-xl flex h-17"
       :class="index % 2 === 1 ? 'mt-4' : 'mb-4'"
     >
       <div class="p-5">
