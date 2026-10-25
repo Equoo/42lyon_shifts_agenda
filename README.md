@@ -2,7 +2,7 @@
 
 A web agenda for the volunteers of the Foyer, the student bar at 42 Lyon: see the week, sign up for day or night shifts, and spot the ones that still need people.
 Rust backend (actix-web + MariaDB), React frontend, login with the 42 intranet.
-Written in a team of three at 42 Lyon.
+Built at 42 Lyon by [Raphaël Desprez-Le Goarant](https://github.com/Raoul1808) (Rust backend) and [David Derny](https://github.com/Equoo) (React frontend).
 
 ## Build and run
 
@@ -38,6 +38,13 @@ The backend runs under `cargo watch`, so it rebuilds on every change. The SQL qu
 3. **API**: everything lives under `/api` (`/auth/me`, `/shifts/week?start=`, `/shifts/register`, `/shifts/unregister`...). The week endpoint returns the seven days with their registered users in a single query.
 4. **Frontend**: a React app (Create React App + Tailwind) that loads the current week, and updates a single shift card from the response after each sign-up.
 
-## What I learned
+## Technical highlights
 
-How OAuth works from start to finish with a real provider, writing a web backend in Rust with compile-time checked SQL, and running a frontend, a backend and a database together with Docker Compose.
+- OAuth from start to finish with a real provider (the 42 intranet)
+- A Rust web backend with SQL queries checked at compile time
+- Frontend, backend and database run together with Docker Compose
+
+## Authors
+
+- [Raphaël Desprez-Le Goarant](https://github.com/Raoul1808): backend (API, database, authentication)
+- [David Derny](https://github.com/Equoo): frontend (React, Tailwind)
